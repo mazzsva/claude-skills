@@ -23,13 +23,6 @@ difference.
 
 One copy of every skill. One place to change it.
 
-## Requirements
-
-macOS, and [Claude Code](https://claude.com/claude-code). Git, and the GitHub
-CLI from `brew install gh`.
-
-Every skill says what it needs, in its own README.
-
 ## On a new machine
 
 ```bash
@@ -56,5 +49,12 @@ the folder itself would stand in the way of its own link.
 
 `link.sh` is safe to run at any time. It creates what is missing, leaves
 everything else alone, deletes nothing, and says what it did.
+
+## Requirements
+
+macOS, and [Claude Code](https://claude.com/claude-code). Git, and the GitHub
+CLI from `brew install gh`.
+
+Every skill says what it needs, in its own README.
 
 Copyright © 2026 Lorenzo Mazzarotto

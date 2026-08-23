@@ -38,8 +38,8 @@ git clone https://github.com/mazzsva/claude-skills.git ~/Developer/claude-skills
 ~/Developer/claude-skills/link.sh
 ```
 
-Three commands, from any folder. Then restart Claude Code, because skills are
-read at startup. `/reload-skills` picks them up without a restart.
+Three commands, from any folder. Skills are read at startup, so restart Claude
+Code, or run `/reload-skills` and keep working.
 
 `link.sh` creates the missing links, and leaves the existing ones alone. A new
 skill only needs another run.

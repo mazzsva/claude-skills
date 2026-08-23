@@ -41,7 +41,20 @@ git clone https://github.com/mazzsva/claude-skills.git ~/Developer/claude-skills
 Three commands, from any folder. Skills are read at startup, so restart Claude
 Code, or run `/reload-skills` and keep working.
 
-`link.sh` creates the missing links, and leaves the existing ones alone. A new
-skill only needs another run.
+## A new skill
+
+A skill starts in `~/.claude/skills/`, as a plain folder, and stays there while
+it is still changing. When it is ready it moves in:
+
+```bash
+mv ~/.claude/skills/<skill> ~/Developer/claude-skills/
+~/Developer/claude-skills/link.sh
+```
+
+The move comes first. `link.sh` never takes a name that is already in use, so
+the folder itself would stand in the way of its own link.
+
+`link.sh` is safe to run at any time. It creates what is missing, leaves
+everything else alone, deletes nothing, and says what it did.
 
 Copyright © 2026 Lorenzo Mazzarotto

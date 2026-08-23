@@ -1,7 +1,6 @@
 ---
 name: simulator-frame-screenshot
 description: Captures the open iOS Simulator and puts the screen inside an Apple bezel. Use when asked for a framed screenshot, a device mockup, or to frame an image that already exists.
-version: 1.0.0
 ---
 
 # Simulator Frame Screenshot

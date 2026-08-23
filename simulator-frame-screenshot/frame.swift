@@ -1,3 +1,5 @@
+// Copyright © 2026 Lorenzo Mazzarotto
+
 import CoreGraphics
 import Foundation
 import ImageIO

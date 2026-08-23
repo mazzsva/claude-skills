@@ -74,3 +74,5 @@ A rebase replays my commits onto the mainline, so the sides are the opposite of 
 | --- | --- | --- |
 | `--ours` | `<<<<<<< HEAD` | The mainline, and each commit of mine already replayed |
 | `--theirs` | `>>>>>>> <commit>` | The commit of mine being replayed |
+
+Copyright © 2026 Lorenzo Mazzarotto

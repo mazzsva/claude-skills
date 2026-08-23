@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2026 Lorenzo Mazzarotto
 set -e
 R="$(cd "$(dirname "$0")" && pwd)"
 mkdir -p ~/.claude/skills

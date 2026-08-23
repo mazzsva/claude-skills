@@ -37,3 +37,5 @@ It never pushes, and it never deletes the backup.
 ## Requirements
 
 Git, and a remote named `origin`. Nothing else.
+
+Copyright © 2026 Lorenzo Mazzarotto

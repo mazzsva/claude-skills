@@ -36,3 +36,5 @@ macOS, and Xcode. A simulator already open, because it never opens one. Git name
 the project part of the file, and the device and the time stand in without it.
 
 `frame.swift` compiles itself on first use, and again whenever it changes.
+
+Copyright © 2026 Lorenzo Mazzarotto

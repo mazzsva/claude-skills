@@ -43,3 +43,5 @@ Code, or run `/reload-skills` and keep working.
 
 `link.sh` creates the missing links, and leaves the existing ones alone. A new
 skill only needs another run.
+
+Copyright © 2026 Lorenzo Mazzarotto

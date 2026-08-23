@@ -105,3 +105,5 @@ DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" ~/Downloads/shot.png "<device>" "
 Resources](https://developer.apple.com/design/resources/#product-bezels). Put another folder
 of PNGs inside `Bezels/`, and keep Apple's own file names, such as `iPhone 17 Pro - Silver -
 Portrait.png`; the script finds the bezel by name.
+
+Copyright © 2026 Lorenzo Mazzarotto

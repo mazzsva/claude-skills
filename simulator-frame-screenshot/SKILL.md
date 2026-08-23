@@ -23,7 +23,7 @@ UDID=$(printf '%s\n' "$BOOTED" | head -1 | cut -d' ' -f1)
 DEVICE=$(printf '%s\n' "$BOOTED" | head -1 | cut -d' ' -f2-)
 COLOURS=$(DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" --list "$DEVICE" 2>/dev/null)
 COLOUR=$(printf '%s\n' "$COLOURS" | grep -Fix "<colour>")
-if [ -z "$SKILL" ]; then echo "The simulator-frame-screenshot folder is not in .claude/skills."
+if [ -z "$SKILL" ]; then echo "The simulator-frame-screenshot folder was not found."
 elif [ -z "$UDID" ]; then echo "No simulator is open."
 elif [ "$(printf '%s\n' "$BOOTED" | grep -c .)" -gt 1 ]; then printf 'More than one simulator is open. Name one:\n%s\n' "$BOOTED"
 elif [ -z "$COLOURS" ]; then DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" --list "$DEVICE"

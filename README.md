@@ -1,7 +1,7 @@
 # Claude Skills
 
-The skills I use with [Claude Code](https://claude.com/claude-code). Every day,
-on every machine.
+The skills that make [Claude Code](https://claude.com/claude-code) mine on every
+machine.
 
 ## Skills
 

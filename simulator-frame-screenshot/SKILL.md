@@ -85,7 +85,7 @@ FRAMED="$PROJECT-$VIEW-$SLUG"; N=2
 while [ -e ~/Downloads/"$FRAMED".png ]; do FRAMED="$PROJECT-$VIEW-$SLUG-$N"; N=$((N + 1)); done
 mv "${SHOT%.png} Framed.png" ~/Downloads/"$FRAMED".png
 rm -f "$SHOT"
-echo "$FRAMED.png"
+echo ~/Downloads/"$FRAMED".png
 ```
 
 ## How to frame an image that already exists

@@ -26,6 +26,9 @@ Every shot is named `<project>-<view>-<colour>.png`, from the project it is in
 and the view on the screen. A name already taken gets a number, so nothing is
 overwritten.
 
+The finished shot goes to `~/Downloads`. The raw capture is temporary, and it is
+deleted as soon as the shot is framed.
+
 A capture that fails leaves no file behind, so an old shot never goes out as a
 new one. The status bar override stays after the shot, and `xcrun simctl
 status_bar booted clear` puts it back.

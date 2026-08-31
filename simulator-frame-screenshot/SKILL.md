@@ -16,7 +16,7 @@ Put the colour of the argument into `grep -Fix`, then run it:
 
 ```bash
 SKILL=$(ls -d .claude/skills/simulator-frame-screenshot ~/.claude/skills/simulator-frame-screenshot 2>/dev/null | head -1)
-SHOT=~/Downloads/screenshots/.capture.png
+SHOT="${TMPDIR:-/tmp/}simulator-frame-screenshot.png"
 [ -n "$SKILL" ] && { [ "$SKILL/frame" -nt "$SKILL/frame.swift" ] || swiftc -O "$SKILL/frame.swift" -o "$SKILL/frame"; }
 BOOTED=$(xcrun simctl list devices booted | sed -n 's/^ *\(.*\) (\([0-9A-Fa-f-]\{36\}\)) (Booted).*/\2 \1/p')
 UDID=$(printf '%s\n' "$BOOTED" | head -1 | cut -d' ' -f1)
@@ -29,7 +29,7 @@ elif [ "$(printf '%s\n' "$BOOTED" | grep -c .)" -gt 1 ]; then printf 'More than 
 elif [ -z "$COLOURS" ]; then DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" --list "$DEVICE"
 elif [ -z "$COLOUR" ]; then printf 'Name a colour for %s:\n%s\n' "$DEVICE" "$COLOURS"
 else
-  mkdir -p ~/Downloads/screenshots && rm -f "$SHOT"
+  rm -f "$SHOT"
   xcrun simctl status_bar "$UDID" override --time "9:41" --dataNetwork wifi --wifiMode active --wifiBars 3 --cellularMode active --cellularBars 4 --operatorName "" --batteryState discharging --batteryLevel 100
   if xcrun simctl io "$UDID" screenshot "$SHOT" >/dev/null 2>&1 && [ -s "$SHOT" ]
   then echo "$DEVICE | $COLOUR | captured"
@@ -41,7 +41,7 @@ fi
 * **DO** stop and give the user any message the block prints; it stops before the capture,
   and the steps after it fail in a way that hides the cause
 * **DO NOT** guess the colour, and **DO NOT** carry one over from an earlier run
-* **DO NOT** frame `.capture.png` without the `captured` line; the path is the same every
+* **DO NOT** frame the capture without the `captured` line; the path is the same every
   run, and only a capture that worked leaves a file there
 * **DO** keep the device and the colour from the last line as text; a shell variable does
   not live past one command block
@@ -78,11 +78,13 @@ Put the four values into the first line:
 ```bash
 SKILL=$(ls -d .claude/skills/simulator-frame-screenshot ~/.claude/skills/simulator-frame-screenshot 2>/dev/null | head -1)
 DEVICE="<device>"; COLOUR="<colour>"; PROJECT="<project>"; VIEW="<view>"
+SHOT="${TMPDIR:-/tmp/}simulator-frame-screenshot.png"
 SLUG=$(echo "$COLOUR" | tr 'A-Z ' 'a-z-')
-DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" ~/Downloads/screenshots/.capture.png "$DEVICE" "$COLOUR"
+DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" "$SHOT" "$DEVICE" "$COLOUR"
 FRAMED="$PROJECT-$VIEW-$SLUG"; N=2
 while [ -e ~/Downloads/"$FRAMED".png ]; do FRAMED="$PROJECT-$VIEW-$SLUG-$N"; N=$((N + 1)); done
-mv ~/Downloads/screenshots/".capture Framed.png" ~/Downloads/"$FRAMED".png
+mv "${SHOT%.png} Framed.png" ~/Downloads/"$FRAMED".png
+rm -f "$SHOT"
 echo "$FRAMED.png"
 ```
 

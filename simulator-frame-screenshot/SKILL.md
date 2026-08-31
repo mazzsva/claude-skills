@@ -12,13 +12,14 @@ Capture the open simulator and put the screen inside an Apple bezel, named
 
 ## Quick start
 
-Put the colour of the argument into `grep -Fix`, then run it:
+Put the colour of the argument into `grep -Fix`. Put the name of a simulator into
+`grep -Fi`, or leave it empty. Then run it:
 
 ```bash
 SKILL=$(ls -d .claude/skills/simulator-frame-screenshot ~/.claude/skills/simulator-frame-screenshot 2>/dev/null | head -1)
 SHOT="${TMPDIR:-/tmp/}simulator-frame-screenshot.png"
 [ -n "$SKILL" ] && { [ "$SKILL/frame" -nt "$SKILL/frame.swift" ] || swiftc -O "$SKILL/frame.swift" -o "$SKILL/frame"; }
-BOOTED=$(xcrun simctl list devices booted | sed -n 's/^ *\(.*\) (\([0-9A-Fa-f-]\{36\}\)) (Booted).*/\2 \1/p')
+BOOTED=$(xcrun simctl list devices booted | sed -n 's/^ *\(.*\) (\([0-9A-Fa-f-]\{36\}\)) (Booted).*/\2 \1/p' | grep -Fi -- "<simulator>")
 UDID=$(printf '%s\n' "$BOOTED" | head -1 | cut -d' ' -f1)
 DEVICE=$(printf '%s\n' "$BOOTED" | head -1 | cut -d' ' -f2-)
 COLOURS=$(DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" --list "$DEVICE" 2>/dev/null)
@@ -38,9 +39,14 @@ else
 fi
 ```
 
-* **DO** stop and give the user any message the block prints; it stops before the capture,
-  and the steps after it fail in a way that hides the cause
+* **DO** stop when the block prints a failure, and give the user the message; it stops
+  before the capture, and the steps after it fail in a way that hides the cause
 * **DO NOT** guess the colour, and **DO NOT** carry one over from an earlier run
+* **DO** put the colour list, or the names of the open simulators, in front of the user
+  with `AskUserQuestion`, one option for each name; text makes the user type the name,
+  but the tool gives a choice
+* **DO NOT** put `<simulator>` in `grep -Fi` before the user names one; an empty pattern
+  keeps every open simulator, and a name that matches none reads as no simulator at all
 * **DO NOT** frame the capture without the `captured` line; the path is the same every
   run, and only a capture that worked leaves a file there
 * **DO** keep the device and the colour from the last line as text; a shell variable does

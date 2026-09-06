@@ -57,20 +57,34 @@ fi
 
 ## How to name the files
 
-Read the capture, take two strings that the screen shows, then find the view that holds both:
+Read the capture, take two strings that the screen shows, find the views that hold both,
+then read each one and keep the one that draws the screen:
 
 ```bash
 basename "$(git rev-parse --show-toplevel)" | tr 'A-Z' 'a-z'
 grep -rl --include="*View.swift" "<text one>" . | xargs grep -l "<text two>"
+ls **/*View.swift
 ```
 
 * **DO** read the capture with the Read tool; no simulator command gives the view, and
   `launchctl` reports the same state for a foreground app and a background app
 * **DO NOT** use one string alone; a word such as `"Search"` sits in several views, and
-  two strings from the one screen name a single file
+  two strings from the one screen cut the list down
+* **DO** read the file the grep returns, and compare every string in it against the
+  capture; the grep gives a candidate, and only the file itself gives the answer
+* **DO NOT** keep a file whose text the capture does not show; `WelcomeView.swift` holds
+  `"Welcome to"` and `"Continue"`, so it is the wrong file for a screen without them
+* **DO** put the name of each `*View.swift` file beside the capture as well, because the
+  name of the screen is often the name of the file; a sign-in screen is `SignInView.swift`
+* **DO NOT** match a string that sits inside a longer sentence; `"Sign in with Apple"`
+  inside `"Sign in with Apple to keep every entry in your account."` is prose, not a label
+* **DO NOT** take a string that a system control draws, such as the label of a
+  `SignInWithAppleButton` or a `.searchable` field; the view that shows it does not hold it
 * **DO NOT** take a string from the file header; `"Created"` sits in every file
-* **DO** take the view part from the name of the file, in lowercase, so `WelcomeView.swift`
-  gives `welcomeview`
+* **DO NOT** take a string that the app stores, such as the title of a list row; the data
+  sits in a database, and no view holds it
+* **DO** take the view part from the name of the file, in lowercase, so `SignInView.swift`
+  gives `signinview`
 * **DO** give the user the name you chose, and let the user correct it, when the command
   returns nothing or more than one file; a wrong name is worse than a plain name
 * **DO** fall back to the device and the time, in the lowercase and the hyphens the other

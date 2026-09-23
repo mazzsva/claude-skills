@@ -19,12 +19,14 @@ Put the colour of the argument into `grep -Fix`. Put the name of a simulator int
 SKILL=$(ls -d .claude/skills/simulator-frame-screenshot ~/.claude/skills/simulator-frame-screenshot 2>/dev/null | head -1)
 SHOT="${TMPDIR:-/tmp/}simulator-frame-screenshot.png"
 [ -n "$SKILL" ] && { [ "$SKILL/frame" -nt "$SKILL/frame.swift" ] || swiftc -O "$SKILL/frame.swift" -o "$SKILL/frame"; }
-BOOTED=$(xcrun simctl list devices booted | sed -n 's/^ *\(.*\) (\([0-9A-Fa-f-]\{36\}\)) (Booted).*/\2 \1/p' | grep -Fi -- "<simulator>")
+SIMCTL_ERROR=$(xcrun simctl list devices booted 2>&1 >/dev/null)
+BOOTED=$(xcrun simctl list devices booted 2>/dev/null | sed -n 's/^ *\(.*\) (\([0-9A-Fa-f-]\{36\}\)) (Booted).*/\2 \1/p' | grep -Fi -- "<simulator>")
 UDID=$(printf '%s\n' "$BOOTED" | head -1 | cut -d' ' -f1)
 DEVICE=$(printf '%s\n' "$BOOTED" | head -1 | cut -d' ' -f2-)
 COLOURS=$(DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" --list "$DEVICE" 2>/dev/null)
 COLOUR=$(printf '%s\n' "$COLOURS" | grep -Fix "<colour>")
-if [ -z "$SKILL" ]; then echo "The simulator-frame-screenshot folder was not found."
+if [ -n "$SIMCTL_ERROR" ]; then printf 'xcrun cannot find simctl:\n%s\nOpen a Terminal window yourself (this fix needs a password prompt, which does not work inside a Claude session) and run:\nsudo xcode-select -s /Applications/Xcode.app/Contents/Developer\nThen ask again.\n' "$SIMCTL_ERROR"
+elif [ -z "$SKILL" ]; then echo "The simulator-frame-screenshot folder was not found."
 elif [ -z "$UDID" ]; then echo "No simulator is open."
 elif [ "$(printf '%s\n' "$BOOTED" | grep -c .)" -gt 1 ]; then printf 'More than one simulator is open. Name one:\n%s\n' "$BOOTED"
 elif [ -z "$COLOURS" ]; then DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" --list "$DEVICE"
@@ -41,6 +43,9 @@ fi
 
 * **DO** stop when the block prints a failure, and give the user the message; it stops
   before the capture, and the steps after it fail in a way that hides the cause
+* **DO NOT** run `sudo xcode-select` yourself, and **DO NOT** ask the user to paste its
+  output back; `sudo` needs a password typed into a real terminal, and a Claude session
+  has no terminal for that, so tell the user to open Terminal.app and run it there
 * **DO NOT** guess the colour, and **DO NOT** carry one over from an earlier run
 * **DO** put the colour list, or the names of the open simulators, in front of the user
   with `AskUserQuestion`, one option for each name; text makes the user type the name,

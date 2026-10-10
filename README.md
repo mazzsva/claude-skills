@@ -5,10 +5,18 @@ Versioned [Claude Code](https://claude.com/claude-code) skills, symlinked into
 
 ## Skills
 
+### Developer Tools
+
 | Skill | Description |
 | --- | --- |
 | [git-rebase-and-resolve-conflicts](git-rebase-and-resolve-conflicts) | Rebases a branch, and resolves every conflict. |
 | [simulator-frame-screenshot](simulator-frame-screenshot) | Puts the simulator screen inside a real Apple bezel. |
+
+### Utilities
+
+| Skill | Description |
+| --- | --- |
+| [organize-downloads](organize-downloads) | Sorts the loose files in Downloads into folders by topic. |
 
 Every skill stands on its own. Its assets and its README sit in the same folder.
 

@@ -1,32 +1,26 @@
 # organize-downloads-folder
 
-Downloads fills up with screenshots named after the time they were taken.
-The name says when. It never says what.
+Sorts the files and folders in the Downloads folder into subfolders by topic.
 
-This one looks at every image, and finds the project it belongs to. Then it
-moves each file into a folder named after that project, so nothing stays loose.
+## How it works
 
-## How it decides
-
-It reads a small copy of each image, not the file itself, so a folder of large
-screenshots stays cheap.
-
-A README can be wrong. A project can carry text copied from another one. So a
-screen gets matched to a project by a string it shows, found in that project's
-source.
-
-A PDF gets its title from its own metadata.
+1. Lists the files and folders in the Downloads folder.
+2. Reads the content of each item to find its topic.
+3. Moves each item into a topic folder that it made, and marks that folder.
+4. Reports files that are duplicates.
 
 ## Safety
 
-It moves files. It never renames them, and it never deletes them. The date stays
-in each name, and every decision about what to keep stays with you.
-
-Two files with the same content get reported, not removed.
+- Moves items only. It does not rename, change, or delete them.
+- Moves your folders whole. It does not add to them or take from them.
+- Does not replace a file that has the same name.
+- Does not move a file that is still being written.
+- Does not move hidden files, or downloads that are not complete.
+- Does not open apps, disk images, or scripts.
+- Does not show the content of keys or credentials.
 
 ## Requirements
 
-macOS, for `sips`, `mdls`, and `md5`. Projects in `~/Developer`, each with a
-README.
+macOS.
 
 Copyright © 2026 Lorenzo Mazzarotto

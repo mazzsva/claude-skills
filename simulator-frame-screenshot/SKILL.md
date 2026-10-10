@@ -12,21 +12,24 @@ Capture the open simulator and put the screen inside an Apple bezel, named
 
 ## Quick start
 
-Put the colour of the argument into `grep -Fix`. Put the name of a simulator into
-`grep -Fi`, or leave it empty. Then run it:
+Put the colour of the argument in place of `<colour>`. Put the name of a simulator in place
+of each `<simulator>`, or leave them empty. Then run it:
 
 ```bash
-SKILL=$(ls -d .claude/skills/simulator-frame-screenshot ~/.claude/skills/simulator-frame-screenshot 2>/dev/null | head -1)
-SHOT="${TMPDIR:-/tmp/}simulator-frame-screenshot.png"
-[ -n "$SKILL" ] && { [ "$SKILL/frame" -nt "$SKILL/frame.swift" ] || swiftc -O "$SKILL/frame.swift" -o "$SKILL/frame"; }
-SIMCTL_ERROR=$(xcrun simctl list devices booted 2>&1 >/dev/null)
-BOOTED=$(xcrun simctl list devices booted 2>/dev/null | sed -n 's/^ *\(.*\) (\([0-9A-Fa-f-]\{36\}\)) (Booted).*/\2 \1/p' | grep -Fi -- "<simulator>")
+SKILL=$(ls .claude/skills/simulator-frame-screenshot/frame.swift ~/.claude/skills/simulator-frame-screenshot/frame.swift 2>/dev/null | head -1); SKILL=${SKILL%/frame.swift}
+SHOT="${TMPDIR:-/tmp}/simulator-frame-screenshot.png"
+BUILT=yes; [ -n "$SKILL" ] && { [ "$SKILL/frame" -nt "$SKILL/frame.swift" ] || swiftc -O "$SKILL/frame.swift" -o "$SKILL/frame" || BUILT=""; }
+SIMCTL_ERROR=$(xcrun simctl list devices booted 2>&1 >/dev/null) && SIMCTL_ERROR=""
+BOOTED=$(xcrun simctl list devices booted 2>/dev/null | sed -n 's/^ *\(.*\) (\([0-9A-Fa-f-]\{36\}\)) (Booted).*/\2 \1/p' | grep -Fi -- '<simulator>' || true)
+EXACT=$(printf '%s\n' "$BOOTED" | NAME='<simulator>' awk 'tolower(substr($0, 38)) == tolower(ENVIRON["NAME"])')
+[ -n "$EXACT" ] && BOOTED=$EXACT
 UDID=$(printf '%s\n' "$BOOTED" | head -1 | cut -d' ' -f1)
 DEVICE=$(printf '%s\n' "$BOOTED" | head -1 | cut -d' ' -f2-)
-COLOURS=$(DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" --list "$DEVICE" 2>/dev/null)
-COLOUR=$(printf '%s\n' "$COLOURS" | grep -Fix "<colour>")
+COLOURS=$(DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" --list "$DEVICE" 2>/dev/null || true)
+COLOUR=$(printf '%s\n' "$COLOURS" | grep -Fix -- '<colour>' || true)
 if [ -n "$SIMCTL_ERROR" ]; then printf 'xcrun cannot find simctl:\n%s\nOpen a Terminal window yourself (this fix needs a password prompt, which does not work inside a Claude session) and run:\nsudo xcode-select -s /Applications/Xcode.app/Contents/Developer\nThen ask again.\n' "$SIMCTL_ERROR"
 elif [ -z "$SKILL" ]; then echo "The simulator-frame-screenshot folder was not found."
+elif [ -z "$BUILT" ]; then echo "frame.swift did not compile; the errors are above."
 elif [ -z "$UDID" ]; then echo "No simulator is open."
 elif [ "$(printf '%s\n' "$BOOTED" | grep -c .)" -gt 1 ]; then printf 'More than one simulator is open. Name one:\n%s\n' "$BOOTED"
 elif [ -z "$COLOURS" ]; then DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" --list "$DEVICE"
@@ -50,7 +53,7 @@ fi
 * **DO** put the colour list, or the names of the open simulators, in front of the user
   with `AskUserQuestion`, one option for each name; text makes the user type the name,
   but the tool gives a choice
-* **DO NOT** put `<simulator>` in `grep -Fi` before the user names one; an empty pattern
+* **DO NOT** fill in `<simulator>` before the user names one; an empty pattern
   keeps every open simulator, and a name that matches none reads as no simulator at all
 * **DO NOT** frame the capture without the `captured` line; the path is the same every
   run, and only a capture that worked leaves a file there
@@ -66,9 +69,9 @@ Read the capture, take two strings that the screen shows, find the views that ho
 then read each one and keep the one that draws the screen:
 
 ```bash
-basename "$(git rev-parse --show-toplevel)" | tr 'A-Z' 'a-z'
-grep -rl --include="*View.swift" "<text one>" . | xargs grep -l "<text two>"
-ls **/*View.swift
+basename "$(git rev-parse --show-toplevel 2>/dev/null)" | tr 'A-Z' 'a-z'
+find . -name '*View.swift' -not -path '*/.*' -exec grep -qF -e '<text one>' {} \; -exec grep -lF -e '<text two>' {} \;
+find . -name '*View.swift' -not -path '*/.*'
 ```
 
 * **DO** read the capture with the Read tool; no simulator command gives the view, and
@@ -88,6 +91,8 @@ ls **/*View.swift
 * **DO NOT** take a string from the file header; `"Created"` sits in every file
 * **DO NOT** take a string that the app stores, such as the title of a list row; the data
   sits in a database, and no view holds it
+* **DO** choose strings that hold no single quote; each one sits in single quotes, and a
+  quote inside it breaks the command
 * **DO** take the view part from the name of the file, in lowercase, so `SignInView.swift`
   gives `signinview`
 * **DO** give the user the name you chose, and let the user correct it, when the command
@@ -101,35 +106,47 @@ ls **/*View.swift
 Put the four values into the first line:
 
 ```bash
-SKILL=$(ls -d .claude/skills/simulator-frame-screenshot ~/.claude/skills/simulator-frame-screenshot 2>/dev/null | head -1)
-DEVICE="<device>"; COLOUR="<colour>"; PROJECT="<project>"; VIEW="<view>"
-SHOT="${TMPDIR:-/tmp/}simulator-frame-screenshot.png"
-SLUG=$(echo "$COLOUR" | tr 'A-Z ' 'a-z-')
-DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" "$SHOT" "$DEVICE" "$COLOUR"
-FRAMED="$PROJECT-$VIEW-$SLUG"; N=2
-while [ -e ~/Downloads/"$FRAMED".png ]; do FRAMED="$PROJECT-$VIEW-$SLUG-$N"; N=$((N + 1)); done
-mv "${SHOT%.png} Framed.png" ~/Downloads/"$FRAMED".png
-rm -f "$SHOT"
-echo ~/Downloads/"$FRAMED".png
+SKILL=$(ls .claude/skills/simulator-frame-screenshot/frame.swift ~/.claude/skills/simulator-frame-screenshot/frame.swift 2>/dev/null | head -1); SKILL=${SKILL%/frame.swift}
+DEVICE='<device>'; COLOUR='<colour>'; PROJECT='<project>'; VIEW='<view>'
+SHOT="${TMPDIR:-/tmp}/simulator-frame-screenshot.png"; OUT="${SHOT%.png} Framed.png"
+NAME=$(printf '%s-%s-%s' "$PROJECT" "$VIEW" "$COLOUR" | tr '[:upper:]' '[:lower:]' | sed 's/[^[:alnum:]._-]/-/g; s/^[.-]*//')
+rm -f "$OUT"
+if DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" "$SHOT" "$DEVICE" "$COLOUR" >/dev/null; then
+  FRAMED="$NAME"; N=2
+  while [ -e "$OUT" ] && [ "$N" -lt 1000 ]; do
+    [ -e ~/Downloads/"$FRAMED".png ] || [ -L ~/Downloads/"$FRAMED".png ] || mv -n "$OUT" ~/Downloads/"$FRAMED".png || break
+    [ -e "$OUT" ] && { FRAMED="$NAME-$N"; N=$((N + 1)); }
+  done
+  if [ -e "$OUT" ]; then echo "The framed image was not saved to Downloads."
+  else rm -f "$SHOT"; echo ~/Downloads/"$FRAMED".png
+  fi
+fi
 ```
+
+* **DO** leave out any single quote from a value; each value sits in single quotes, so the
+  shell runs nothing inside it
+* **DO** stop when the block prints no path, and give the user the message; the capture
+  stays, so a second run needs no new capture
+* **DO** tell the user when the block says that the edges are cut off; the image is not the
+  shape of that screen
 
 ## How to frame an image that already exists
 
 ```bash
-SKILL=$(ls -d .claude/skills/simulator-frame-screenshot ~/.claude/skills/simulator-frame-screenshot 2>/dev/null | head -1)
-[ -n "$SKILL" ] && { [ "$SKILL/frame" -nt "$SKILL/frame.swift" ] || swiftc -O "$SKILL/frame.swift" -o "$SKILL/frame"; }
-DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" ~/Downloads/shot.png "<device>" "<colour>"
+SKILL=$(ls .claude/skills/simulator-frame-screenshot/frame.swift ~/.claude/skills/simulator-frame-screenshot/frame.swift 2>/dev/null | head -1); SKILL=${SKILL%/frame.swift}
+[ -n "$SKILL" ] || echo "The simulator-frame-screenshot folder was not found."
+[ -n "$SKILL" ] && { [ "$SKILL/frame" -nt "$SKILL/frame.swift" ] || swiftc -O "$SKILL/frame.swift" -o "$SKILL/frame"; } && DEVTOOLS_BEZELS="$SKILL/Bezels" "$SKILL/frame" '<image>' '<device>' '<colour>'
 ```
 
 * **DO** keep the build line; this task can run without the quick start
 * **DO** run it once for each image; it reads one path, takes no flags, and writes beside
-  the source with ` Framed.png`
+  the source with ` Framed.png`, and stops when that file already exists
 
 ## Reference
 
-`Bezels/` holds four devices. Apple draws more, and a new set each year, at [Apple Design
+`Bezels/` holds two devices. Apple draws more, and a new set each year, at [Apple Design
 Resources](https://developer.apple.com/design/resources/#product-bezels). Put another folder
-of PNGs inside `Bezels/`, and keep Apple's own file names, such as `iPhone 17 Pro - Silver -
+of PNGs inside `Bezels/`, and keep Apple's own file names, such as `iPhone 18 Pro - Silver -
 Portrait.png`; the script finds the bezel by name.
 
 Copyright © 2026 Lorenzo Mazzarotto

@@ -1,7 +1,7 @@
 # Claude Skills
 
-The skills that make [Claude Code](https://claude.com/claude-code) mine on every
-machine.
+Versioned [Claude Code](https://claude.com/claude-code) skills, symlinked into
+`~/.claude`.
 
 ## Skills
 

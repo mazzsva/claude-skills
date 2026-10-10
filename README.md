@@ -16,7 +16,7 @@ Versioned [Claude Code](https://claude.com/claude-code) skills, symlinked into
 
 | Skill | Description |
 | --- | --- |
-| [organize-downloads](organize-downloads) | Sorts the loose files in Downloads into folders by topic. |
+| [organize-downloads-folder](organize-downloads-folder) | Sorts the loose files in Downloads into folders by topic. |
 
 Every skill stands on its own. Its assets and its README sit in the same folder.
 

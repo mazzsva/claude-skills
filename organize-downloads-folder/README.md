@@ -1,4 +1,4 @@
-# organize-downloads
+# organize-downloads-folder
 
 Downloads fills up with screenshots named after the time they were taken.
 The name says when. It never says what.

@@ -1,9 +1,9 @@
 ---
-name: organize-downloads
+name: organize-downloads-folder
 description: Sorts the loose files in the Downloads folder into subfolders by topic. Use when asked to organize, sort, or tidy the Downloads folder.
 ---
 
-# Organize Downloads
+# Organize Downloads Folder
 
 ## Goal
 
@@ -15,7 +15,7 @@ so that no file stays loose.
 List the loose files and the folders, and make a small copy of each image:
 
 ```bash
-T="${TMPDIR:-/tmp/}organize-downloads"; rm -rf "$T"; mkdir -p "$T"
+T="${TMPDIR:-/tmp/}organize-downloads-folder"; rm -rf "$T"; mkdir -p "$T"
 cd ~/Downloads
 ls -p | grep -v / | grep -v '^\.'
 ls -d */ 2>/dev/null
@@ -67,7 +67,7 @@ mv "Screenshot 2026-10-09 at 12.20.27"*.png "<Topic>/"
 cd ~/Downloads
 ls -p | grep -v / | grep -v '^\.'
 for d in */ */*/; do [ -d "$d" ] && echo "$(ls "$d" | grep -vc /) $d"; done
-rm -rf "${TMPDIR:-/tmp/}organize-downloads"
+rm -rf "${TMPDIR:-/tmp/}organize-downloads-folder"
 ```
 
 * **DO** move each file that the first command still prints; it prints nothing when the

@@ -9,9 +9,9 @@ bars, full battery, the way Apple shoots it.
 
 ## Bezels
 
-Four devices ship with the skill, in every stock colour, portrait and landscape.
+Two devices ship with the skill, in every stock colour, portrait and landscape.
 
-iPhone 17. iPhone 17 Pro. iPhone 17 Pro Max. iPhone Air.
+iPhone 18 Pro. iPhone Air.
 
 Apple draws a new set each year, at [Apple Design
 Resources](https://developer.apple.com/design/resources/#product-bezels). A

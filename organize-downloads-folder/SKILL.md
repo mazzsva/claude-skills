@@ -58,7 +58,7 @@ Make each topic folder with `mkdir`, and mark it; then move each item into it wh
 
 ```bash
 cd ~/Downloads
-Z="${TMPDIR:-/tmp/}organize-downloads-folder/sizes"; stat -f '%z %N' * > "$Z"; sleep 5; stat -f '%z %N' * | diff "$Z" -
+Z="${TMPDIR:-/tmp/}organize-downloads-folder/sizes"; stat -f '%z %N' -- * > "$Z"; sleep 5; stat -f '%z %N' -- * | diff "$Z" -
 mkdir "<Topic>" && xattr -w organize-downloads-folder 1 "<Topic>"
 ls "<Topic>/<name>" 2>/dev/null
 mv -n -- "<item>" "<Topic>/"

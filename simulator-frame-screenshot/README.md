@@ -13,9 +13,9 @@ Two devices ship with the skill, in every stock colour, portrait and landscape.
 
 iPhone 18 Pro. iPhone Air.
 
-Apple draws a new set each year, at [Apple Design
-Resources](https://developer.apple.com/design/resources/#product-bezels). A
-folder of those PNGs inside `Bezels/`, under Apple's own file names, adds one.
+To add a device, put its folder from [Apple Design
+Resources](https://developer.apple.com/design/resources/#product-bezels) in
+`Bezels/` and keep Apple's file names.
 
 ## Safety
 

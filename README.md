@@ -1,6 +1,6 @@
 # Claude Skills
 
-Versioned [Claude Code](https://claude.com/claude-code) skills, symlinked into `~/.claude`.
+Versioned [Claude Code](https://claude.com/claude-code) skills, symlinked into `~/.claude`
 
 ## Developer Tools
 

@@ -15,7 +15,9 @@ Versioned [Claude Code](https://claude.com/claude-code) skills, symlinked into `
   <tr><td><a href="organize-downloads-folder">organize-downloads-folder</a></td><td>Sorts the Downloads folder into subfolders by topic.</td></tr>
 </table>
 
-## Setup
+## Install
+
+You need Claude Code. Then link the skills into `~/.claude/skills`:
 
 ```
 git clone https://github.com/mazzsva/claude-skills.git

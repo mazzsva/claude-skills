@@ -83,7 +83,7 @@ mv -n -- "<item>" "<Topic>/"
 ```bash
 cd ~/Downloads
 for f in *; do xattr -p organize-downloads-folder "./$f" >/dev/null 2>&1 || echo "$f"; done | grep -v -e '\.crdownload$' -e '\.download$' -e '\.part$'
-find . -type f -size +0 -not -name '.*' -not -path '*.app/*' -exec md5 -r {} + | sort | awk '$1==p{print} {p=$1}'
+find . -type f -size +0 -not -name '.*' -not -path '*.app/*' -exec md5 -r {} + | sort | awk '$1==p{if(!s)print q; print; s=1; next} {p=$1; q=$0; s=0}'
 find . -mindepth 1 -maxdepth 2 -type d -not -path '*.app/*' | sort
 rm -rf "${TMPDIR:-/tmp/}organize-downloads-folder"
 ```

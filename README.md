@@ -5,6 +5,7 @@ Versioned [Claude Code](https://claude.com/claude-code) skills, symlinked into `
 ## Developer tools
 
 <table>
+  <tr><td><a href="git-clean-up-worktrees-and-branches">git-clean-up-worktrees-and-branches</a></td><td>Moves merged worktrees to the Trash, and deletes merged branches.</td></tr>
   <tr><td><a href="git-rebase-and-resolve-conflicts">git-rebase-and-resolve-conflicts</a></td><td>Rebases a branch and resolves every conflict.</td></tr>
   <tr><td><a href="simulator-frame-screenshot">simulator-frame-screenshot</a></td><td>Puts the simulator screen inside a real Apple bezel.</td></tr>
 </table>

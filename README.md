@@ -5,7 +5,7 @@ Versioned [Claude Code](https://claude.com/claude-code) skills, symlinked into `
 ## Developer tools
 
 <table>
-  <tr><td><a href="propose">propose</a></td><td>Proposes changes as small commits and pull requests.</td></tr>
+  <tr><td><a href="propose">propose</a></td><td>Proposes changes as logical commits and pull requests.</td></tr>
   <tr><td><a href="rebase">rebase</a></td><td>Rebases a branch and resolves every conflict.</td></tr>
 </table>
 

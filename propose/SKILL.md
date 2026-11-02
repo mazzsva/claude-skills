@@ -1,13 +1,13 @@
 ---
 name: propose
-description: Proposes the changes in the working tree on GitHub. Groups them by topic, splits each topic into small commits, pushes it on a well-named branch, and opens one pull request for each topic. Use when asked to propose changes, commit, push, or open or create a pull request.
+description: Proposes the changes in the working tree on GitHub. Groups them by topic, splits each topic into logical chunks, pushes it on a well-named branch, and opens one pull request for each topic. Use when asked to propose changes, commit, push, or open or create a pull request.
 ---
 
 # Propose
 
 ## Goal
 
-Propose my changes: group them by topic, commit each topic in small commits, push it on a
+Propose my changes: group them by topic, commit each topic in logical chunks, push it on a
 branch that has a good name, and open one pull request for each topic.
 
 ## Quick start
@@ -179,8 +179,8 @@ git -c core.quotepath=off show --stat HEAD
 * **DO** give each commit one change that a reviewer can read alone
 * **DO** order the commits so that each one builds; when the repository has no build, so that
   each one reads alone; a new type comes before its first use
-* **DO** use one commit when all of the changes of a topic have one reason; small means one
-  change, not one file
+* **DO** use one commit when all of the changes of a topic have one reason; a logical chunk
+  means one change, not one file
 * **DO** treat lines that I staged, when they are not all of the changes, as one commit I
   made ready
 * **DO** split a commit whose message needs an "and" to name it; that is two changes, even

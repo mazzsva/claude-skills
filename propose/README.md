@@ -5,7 +5,7 @@ that holds three topics is hard to review.
 
 A day of work is rarely one change. It is a fix, a rename, a new test, and a
 dependency bump, all in the same files. This groups them by topic, splits each
-topic into small commits, pushes it on a branch with a good name, and opens one
+topic into logical chunks, pushes it on a branch with a good name, and opens one
 pull request for each topic.
 
 ## How it plans

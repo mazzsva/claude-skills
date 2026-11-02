@@ -7,7 +7,6 @@ Versioned [Claude Code](https://claude.com/claude-code) skills, symlinked into `
 <table>
   <tr><td><a href="propose">propose</a></td><td>Proposes changes as small commits and pull requests.</td></tr>
   <tr><td><a href="git-rebase-and-resolve-conflicts">git-rebase-and-resolve-conflicts</a></td><td>Rebases a branch and resolves every conflict.</td></tr>
-  <tr><td><a href="simulator-frame-screenshot">simulator-frame-screenshot</a></td><td>Puts the simulator screen inside a real Apple bezel.</td></tr>
 </table>
 
 ## Utility tools

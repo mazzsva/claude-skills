@@ -1,4 +1,4 @@
-# git-rebase-and-resolve-conflicts
+# rebase
 
 The rebase is not the hard part. The conflicts are.
 

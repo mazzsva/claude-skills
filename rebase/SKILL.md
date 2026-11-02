@@ -1,9 +1,9 @@
 ---
-name: git-rebase-and-resolve-conflicts
+name: rebase
 description: Rebases a branch onto another branch and resolves each conflict. Use when rebasing onto a mainline, continuing a rebase that is already in progress, or resolving rebase conflicts.
 ---
 
-# Git Rebase and Resolve Conflicts
+# Rebase
 
 ## Goal
 

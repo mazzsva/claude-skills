@@ -41,6 +41,9 @@ for p in rebase-merge rebase-apply sequencer BISECT_LOG; do ls -d "$(git rev-par
 * **DO** stop and tell me when there is nothing to commit and nothing to push, and the
   branch has an open pull request or I did not ask for one; nothing to commit means no
   change except the files that I leave out
+* **DO** stop and tell me when HEAD is the default branch, there is nothing to commit, and
+  `git rev-list --count origin/<default branch>..HEAD` prints 0, also when I asked for a
+  pull request; the default branch cannot be the head of a pull request on itself
 * **DO** open the pull request when the branch is pushed, has none, and I asked for one
 * **DO** stop and ask me before a push when there is no `origin` on GitHub, `gh auth status`
   fails, `viewerPermission` is `READ`, `isFork` is true, or the two URLs of `origin` differ

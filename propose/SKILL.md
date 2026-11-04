@@ -223,6 +223,9 @@ git -c core.quotepath=off show --stat HEAD
   secret, with `git ls-files -z --others --exclude-standard | xargs -0 grep -nIiE
   'key=|token|password|BEGIN PRIVATE KEY|ghp_|sk-' /dev/null`; stop and ask me before a file or a
   line that looks like one goes into a commit, such as `.env`, a key, or a certificate
+* **DO** run `git grep --cached -nE 'url *= *(/|~|file:)' -- .gitmodules '*/.gitmodules'`
+  before each commit, and stop and ask me when it prints a line; a url that is a path on
+  this Mac breaks the clone for everyone else
 * **DO** find large files with `find . -path ./.git -prune -o -type f -size +50M -exec ls -l
   {} +`; ask me before a file from 50 to 100 MB goes into a commit, and leave out a file
   larger than 100 MB, because GitHub refuses it, and tell me

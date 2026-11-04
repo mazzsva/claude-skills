@@ -236,10 +236,10 @@ git -c core.quotepath=off show --stat HEAD
   error, when one fails
 * **DO** leave out the files that a check wrote, such as build output; **DO** save the
   untracked files with `git ls-files -z --others --exclude-standard >
-  "$TMPDIR/untracked.list"`, and compare `{ git diff HEAD; xargs -0 -r shasum --
-  < "$TMPDIR/untracked.list" 2>&1; } | shasum` before and after the checks, because a status
-  misses a file that I already changed; stop and tell me when the two differ, and **DO NOT**
-  revert it; remove the list with `rm -f` at the end
+  "${TMPDIR:-/tmp}/untracked.list"`, and compare `{ git diff HEAD; xargs -0 -r shasum --
+  < "${TMPDIR:-/tmp}/untracked.list" 2>&1; } | shasum` before and after the checks, because
+  a status misses a file that I already changed; stop and tell me when the two differ, and
+  **DO NOT** revert it
 * **DO** use one commit when all of the changes of a topic have one reason; a logical chunk
   means one change, not one file
 * **DO** treat lines that I staged, when they are not all of the changes, as one commit I
@@ -461,8 +461,8 @@ request that I asked for worked:
   origin/<default branch>..<branch>`; `git branch -d` only warns about a pushed branch that
   is not merged, so this check is the guard
 * **DO** remove the worktree first, with `git worktree remove <folder>`, then the branch with
-  `git branch -d <branch>`, then each temporary index file with `rm -f <index file>`, and a
-  temporary folder that you made with `rmdir <folder>` when it is empty
+  `git branch -d <branch>`, then each temporary index file and the untracked list with
+  `rm -f`, and a temporary folder that you made with `rmdir <folder>` when it is empty
 * **DO** give me the commands for later when I say no, and remove nothing
 * **DO NOT** remove the worktree that the shell is in, **DO NOT** use `--force` or `-D`, and
   **DO NOT** remove a remote branch or an item that this session did not make

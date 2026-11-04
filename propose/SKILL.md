@@ -113,7 +113,8 @@ GIT_LITERAL_PATHSPECS=1 git diff HEAD -- <file>
   file and each folder whose name differs on disk; stage a file with `git mv -f <old> <new>`,
   and a folder with `git mv <old> <temporary name>` and then `git mv <temporary name>
   <new>`, because `git mv -f` fails on a folder; use a temporary name that does not exist;
-  tell me what it printed:
+  run it again after each folder rename, because a nested line names the old parent; tell me
+  what it printed:
 
   ```bash
   git ls-files -z | while IFS= read -r -d '' f; do while :; do printf '%s\0' "$f"; case $f in */*) f=${f%/*} ;; *) break ;; esac; done; done | sort -zu | while IFS= read -r -d '' f; do d=$(dirname -- "$f"); b=$(basename -- "$f"); ls -1A -- "$d" | grep -qxF -- "$b" && continue; n=$(ls -1A -- "$d" | grep -ixF -- "$b" | head -n 1); [ -n "$n" ] || continue; if [ "$d" = . ]; then echo "case differs: $f -> $n"; else echo "case differs: $f -> $d/$n"; fi; done

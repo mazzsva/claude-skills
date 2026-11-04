@@ -150,7 +150,9 @@ than one pull request, use the newest one:
 5. HEAD is `worktree-agent-<hex>` with no commit that is not in `origin/<default branch>`:
    **DO** make a new branch as in rule 1; when it has commits and it is not pushed and has
    no pull request, **DO** rename it by rule 8; otherwise go on with rule 6
-6. The pull request is `CLOSED`: **DO** ask me once, with a new branch as the suggestion
+6. The pull request is `CLOSED`: **DO** ask me once, with a new branch as in rule 1 as the
+   suggestion, or `git switch -c <new branch>` to take its commits; tell me that the
+   commits of the closed branch stay on it when I choose the suggestion
 7. The branch is pushed or has an open pull request: **DO** keep it when its commits or its
    name are about the topic of the changes; **DO** otherwise ask me once, with a new branch
    as the suggestion, as in rule 1, or `git switch -c <new branch> --no-track <base branch>`

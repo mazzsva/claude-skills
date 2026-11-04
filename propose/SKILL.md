@@ -227,8 +227,10 @@ git -c core.quotepath=off show --stat HEAD
   and without a trailing slash for a link
 * **DO** read `git diff --cached` before each commit; it is the commit
 * **DO** stop and tell me when `git diff --cached --check` prints a line for a line that you
-  added, unless it is only the carriage return of a file with CRLF line ends; never fix the
-  file; ignore the warning "LF will be replaced"
+  added; for a file with CRLF line ends run `git -c core.whitespace=cr-at-eol diff --cached
+  --check` instead, which ignores only the carriage return; tell me when `git ls-files --eol`
+  shows `i/mixed` for a staged file; never fix the file; ignore the warning "LF will be
+  replaced"
 * **DO** follow the commit message rules of CLAUDE.md; when there are none, match the
   style of `git log --oneline`; a commit has one `-m`, no body, and no trailer, and no line
   such as "Generated with"

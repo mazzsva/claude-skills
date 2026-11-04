@@ -353,7 +353,8 @@ git -C <folder> commit -m "<message>"
 * **DO** compare a file that is split across pull requests, as in the verify section, before
   the first push, so that a conflict stops you before a pull request is open
 * **DO** push, and open the pull request from the worktree, by the sections above
-* **DO** stop and ask me when `git apply` rejects a change
+* **DO** stop and ask me when `git apply` rejects a change; tell me the worktree, the branch,
+  and the index file that you made, which stay until I answer
 * **DO NOT** run `git stash`, `git checkout`, or `git reset` in the working tree
 
 ## How to verify

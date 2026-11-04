@@ -147,9 +147,16 @@ than one pull request, use the newest one:
    **DO** make a new branch as in rule 1 when its commits are about another topic; **DO**
    otherwise rename it with `git branch -m <new branch>`
 
-* **DO** stop when `git switch -c` refuses because a changed file also differs in
-  `origin/<default branch>`, even where the lines do not overlap; **DO NOT** stash; tell me
-  which files the error names, and ask me whether to branch from the current HEAD instead
+* **DO** run this before each `git switch -c` from `origin/<default branch>`; it prints each
+  changed file, a deleted file too, that `origin/<default branch>` changed since HEAD:
+
+  ```bash
+  git diff -z --name-only --no-renames HEAD | xargs -0 -r git diff --name-only HEAD...origin/<default branch> --
+  ```
+* **DO** stop when it prints a line, or when `git switch -c` refuses, even where the lines do
+  not overlap; a switch that does not refuse can still restore a deleted file and lose my
+  change; **DO NOT** stash; tell me which files, and ask me whether to branch from the
+  current HEAD instead
 * **DO** name the branch in two to four words of kebab case, for the topic and not for the
   date, in the style that `git branch -r` shows, with its prefix when the style has one
 * **DO** check the name with `git ls-remote --heads origin <new branch>`, `git branch --list

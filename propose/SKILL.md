@@ -106,7 +106,7 @@ GIT_LITERAL_PATHSPECS=1 git diff HEAD -- <file>
 * **DO** put a new file in the topic of the change that uses or documents it; a new file
   that no change uses or documents is a topic of its own
 * **DO** keep the old path and the new path of a rename in one topic, and stage both with
-  `git add -- <old> <new>`; read it after staging with `GIT_LITERAL_PATHSPECS=1 git diff --cached -M -- <old> <new>`
+  `GIT_LITERAL_PATHSPECS=1 git add -- <old> <new>`; read it after staging with `GIT_LITERAL_PATHSPECS=1 git diff --cached -M -- <old> <new>`
 * **DO** find a rename that only changes case when `core.ignorecase` is true, because the
   status is then empty; run this, and it prints `case differs: <old> -> <new>` for each
   file and each folder whose name differs on disk; stage a file with `git mv -f <old> <new>`,
@@ -252,9 +252,9 @@ git -c core.quotepath=off show --stat HEAD
 * **DO** end a staged part of a file before a blank line, not on it, because `git diff
   --cached --check` reports a new blank line at EOF for it
 * **DO** stage a mode change, a deletion, a symbolic link, a binary file, an empty file, and
-  a file with a filter with `git add -- <file>`; the script refuses them; and after the last
-  part of a split file run `git add -- <file>`, because the script stages content and not
-  the mode
+  a file with a filter with `GIT_LITERAL_PATHSPECS=1 git add -- <file>`; the script refuses
+  them; and after the last part of a split file run `GIT_LITERAL_PATHSPECS=1 git add --
+  <file>`, because the script stages content and not the mode
 * **DO** pass a name to `git add --` as a real path, never as the quoted text of a listing,
   and without a trailing slash for a link
 * **DO** read `git diff --cached` before each commit; it is the commit

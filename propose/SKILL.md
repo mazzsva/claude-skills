@@ -230,7 +230,7 @@ git -c core.quotepath=off show --stat HEAD
 
 ```bash
 git log -p --stat origin/<default branch>..HEAD
-git rev-list --objects origin/<default branch>..HEAD | git cat-file --batch-check='%(objecttype) %(objectsize) %(rest)' | awk '$1=="blob" && $2>52428800'
+git rev-list --objects origin/<default branch>..HEAD | git cat-file --batch-check='%(objecttype) %(objectsize) %(rest)' | while read -r type size rest; do if [ "$type" = blob ] && [ "$size" -gt 52428800 ]; then echo "$size $rest"; fi; done
 GIT_TERMINAL_PROMPT=0 git push -u origin <branch>
 ```
 

@@ -127,7 +127,9 @@ than one pull request, use the newest one:
    changes come along
 2. HEAD is the default branch, and it holds commits that are not pushed: **DO** ask me
    once to take the commits into the pull request, with `git switch -c <new branch>`, or to
-   leave them out, as in rule 1; tell me that the local default branch stays ahead
+   leave them out; tell me that the local default branch stays ahead; **DO** build the pull
+   request without the commits in a worktree, by the section on more than one pull request,
+   because `git switch -c` from `origin/<default branch>` rewrites the files that they changed
 3. HEAD is detached: **DO** make the new branch as in rule 1 when HEAD is in the history of
    `origin/<default branch>`, and with `git switch -c <new branch>` when it is not, so that
    its commits stay

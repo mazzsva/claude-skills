@@ -364,7 +364,7 @@ git -C <folder> commit -m "<message>"
   `<base>`, and stop and ask me when it prints a line; lines that I listed against HEAD
   are not the lines against a newer base
 * **DO** put the folder and the index file in `$TMPDIR`, as absolute paths, one index file
-  for each pull request
+  for each pull request, and quote them in every command, because `$TMPDIR` can hold a space
 * **DO** stage with `stage-lines.sh`, and only the lines of `git diff HEAD -- <file>`, a file
   that the left-out commits also change; `git add -- <file>` takes their lines
 * **DO** put `GIT_INDEX_FILE` in front of one command, and **DO NOT** export it; `git apply

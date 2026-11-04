@@ -90,6 +90,8 @@ git diff HEAD -- <file>
   refactor, a dependency update, or a format change; a reviewer can approve a topic alone
 * **DO** keep a topic together with its tests, its lockfile, its generated files, and its
   documentation; a lockfile without its manifest breaks the build
+* **DO** put a new file in the topic of the change that uses or documents it; a new file
+  that no change uses or documents is a topic of its own
 * **DO** keep the old path and the new path of a rename in one topic, and stage both with
   `git add -- <old> <new>`; read it after staging with `git diff --cached -M -- <old> <new>`
 * **DO** find a rename that only changes case when `core.ignorecase` is true, because the

@@ -174,6 +174,9 @@ than one pull request, use the newest one:
 * **DO** check the name with `git ls-remote --heads origin <new branch>`, `git branch --list
   <new branch>`, and `gh pr list --repo <nameWithOwner> --head <new branch> --state all`;
   all three print nothing; choose another name when `git switch -c` or the push fails on it
+* **DO** run `git rev-list HEAD..origin/<branch>` before the first commit on a kept branch
+  that `git ls-remote --heads origin <branch>` lists; ask me for a new name when it prints
+  a line, because the push would be rejected
 * **DO** read the answer "no pull requests found" of `gh pr view`, with exit status 1, as
   "none exists"
 * **DO NOT** reuse the branch of a pull request that is `MERGED`

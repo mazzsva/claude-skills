@@ -163,10 +163,12 @@ than one pull request, use the newest one:
 3. HEAD is detached: **DO** make the new branch as in rule 1 when HEAD is in the history of
    `origin/<default branch>`, and with `git switch -c <new branch>` when it is not, so that
    its commits stay
-4. The pull request of the branch is `MERGED`: **DO** make a new branch as in rule 1, and
-   trust the state over the commit count, which is wrong after a squash merge; **DO** ask
-   me first when `git cherry origin/<default branch> HEAD` prints a `+` line, because the
-   branch holds work that the merge does not
+4. The pull request of the branch is `MERGED`: **DO** stop and tell me when there is
+   nothing to commit and `git cherry origin/<default branch> HEAD` prints no `+` line,
+   because the merge holds all of the work; otherwise **DO** make a new branch as in rule
+   1, and trust the state over the commit count, which is wrong after a squash merge; **DO**
+   ask me first when the command prints a `+` line, because the branch holds work that the
+   merge does not
 5. HEAD is `worktree-agent-<hex>` with no commit that is not in `origin/<default branch>`:
    **DO** make a new branch as in rule 1; when it has commits and it is not pushed and has
    no pull request, **DO** rename it by rule 8; otherwise go on with rule 6

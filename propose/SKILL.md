@@ -95,13 +95,13 @@ git diff HEAD -- <file>
 * **DO** keep the old path and the new path of a rename in one topic, and stage both with
   `git add -- <old> <new>`; read it after staging with `git diff --cached -M -- <old> <new>`
 * **DO** find a rename that only changes case when `core.ignorecase` is true, because the
-  status is then empty; this prints each file and each folder whose name differs on disk;
-  stage a file with `git mv -f <old> <new>`, and a folder with `git mv <old folder>
-  <temporary name>` and then `git mv <temporary name> <new folder>`, because `git mv -f`
-  fails on a folder; use a temporary name that does not exist; tell me:
+  status is then empty; this prints each file and each folder whose name differs on disk,
+  as `<old> -> <new>`; stage a file with `git mv -f <old> <new>`, and a folder with `git mv
+  <old> <temporary name>` and then `git mv <temporary name> <new>`, because `git mv -f` fails
+  on a folder; use a temporary name that does not exist; tell me:
 
   ```bash
-  git ls-files -z | while IFS= read -r -d '' f; do while :; do printf '%s\0' "$f"; case $f in */*) f=${f%/*} ;; *) break ;; esac; done; done | sort -zu | while IFS= read -r -d '' f; do ls -1 -- "$(dirname -- "$f")" | grep -qxF -- "$(basename -- "$f")" || echo "case differs: $f"; done
+  git ls-files -z | while IFS= read -r -d '' f; do while :; do printf '%s\0' "$f"; case $f in */*) f=${f%/*} ;; *) break ;; esac; done; done | sort -zu | while IFS= read -r -d '' f; do d=$(dirname -- "$f"); b=$(basename -- "$f"); ls -1A -- "$d" | grep -qxF -- "$b" && continue; n=$(ls -1A -- "$d" | grep -ixF -- "$b" | head -n 1); if [ "$d" = . ]; then echo "case differs: $f -> $n"; else echo "case differs: $f -> $d/$n"; fi; done
   ```
 * **DO** stage the untracked files of one topic with `git ls-files -z --others --exclude-standard
   | xargs -0 git add --`, or one by one with `while IFS= read -r -d '' f; do ...; done`

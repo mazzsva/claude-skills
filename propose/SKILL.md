@@ -227,9 +227,12 @@ git -c core.quotepath=off show --stat HEAD
 * **DO** run the build, the tests, and the lint that CLAUDE.md asks for before the first
   commit of a topic; tell me in the report when the project has none; **DO** stop and tell
   me, with the first error, when one fails
-* **DO** leave out the files that a check wrote, such as build output; **DO** compare
-  `git diff HEAD | shasum` before and after the checks, because a status misses a file that
-  I already changed; stop and tell me when the two differ, and **DO NOT** revert it
+* **DO** leave out the files that a check wrote, such as build output; **DO** save the
+  untracked files with `git ls-files -z --others --exclude-standard >
+  "$TMPDIR/untracked.list"`, and compare `{ git diff HEAD; xargs -0 -r shasum --
+  < "$TMPDIR/untracked.list" 2>&1; } | shasum` before and after the checks, because a status
+  misses a file that I already changed; stop and tell me when the two differ, and **DO NOT**
+  revert it; remove the list with `rm -f` at the end
 * **DO** use one commit when all of the changes of a topic have one reason; a logical chunk
   means one change, not one file
 * **DO** treat lines that I staged, when they are not all of the changes, as one commit I

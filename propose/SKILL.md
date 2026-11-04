@@ -175,10 +175,11 @@ than one pull request, use the newest one:
    otherwise rename it with `git branch -m <new branch>`
 
 * **DO** run this before each `git switch -c` from `origin/<default branch>`; it prints each
-  changed file, a deleted file too, that `origin/<default branch>` changed since HEAD:
+  changed file, a deleted file and an untracked file too, that `origin/<default branch>`
+  changed since HEAD:
 
   ```bash
-  git diff -z --name-only --no-renames HEAD | xargs -0 -r git diff --name-only HEAD...origin/<default branch> --
+  { git diff -z --name-only --no-renames HEAD; git ls-files -z --others --exclude-standard; } | GIT_LITERAL_PATHSPECS=1 xargs -0 -r git diff --name-only HEAD...origin/<default branch> --
   ```
 * **DO** stop when it prints a line, or when `git switch -c` refuses, even where the lines do
   not overlap; a switch that does not refuse can still restore a deleted file and lose my

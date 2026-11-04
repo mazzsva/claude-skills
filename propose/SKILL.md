@@ -303,6 +303,9 @@ git -C <folder> commit -m "<message>"
 
 * **DO** use `origin/<default branch>` as `<base>`, or the tip of the branch that this one
   stacks on; for the next commit of a topic, read the tree of the tip of its own branch
+* **DO** run the command of the branch rules before you use `origin/<default branch>` as
+  `<base>`, and stop and ask me when it prints a line; lines that I listed against HEAD
+  are not the lines against a newer base
 * **DO** put the folder and the index file in `$TMPDIR`, as absolute paths, one index file
   for each pull request
 * **DO** stage with `stage-lines.sh`, and only the lines of `git diff HEAD -- <file>`, a file

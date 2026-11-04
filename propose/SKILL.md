@@ -351,6 +351,8 @@ git -C <folder> commit -m "<message>"
   for each pull request
 * **DO** stage with `stage-lines.sh`, and only the lines of `git diff HEAD -- <file>`, a file
   that the left-out commits also change; `git add -- <file>` takes their lines
+* **DO** put `GIT_INDEX_FILE` in front of one command, and **DO NOT** export it; `git apply
+  --index` would then read it as the index of the worktree and fail
 * **DO** apply the branch rules to each name; the worktree makes the branch
 * **DO** build the pull request that matches the lines that I staged from `git diff
   --cached --binary` of the real index; read it, and **DO NOT** change the index

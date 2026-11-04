@@ -257,7 +257,7 @@ git -c core.quotepath=off show --stat HEAD
   which does not follow a symbolic link; stop and ask me before a file or a line that looks
   like one goes into a commit, such as `.env`, a key, or a certificate; make no commit until
   I answer
-* **DO** run `git grep --cached -nE 'url *= *(/|~|file:)' -- .gitmodules '*/.gitmodules'`
+* **DO** run `git grep --cached -nE 'url[[:space:]]*=[[:space:]]*(/|~|file:)' -- .gitmodules '*/.gitmodules'`
   before each commit, and stop and ask me when it prints a line; a url that is a path on
   this Mac breaks the clone for everyone else
 * **DO** find large files with `find . -path ./.git -prune -o -type f -size +50M -exec ls -l

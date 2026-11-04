@@ -61,7 +61,8 @@ for p in rebase-merge rebase-apply sequencer BISECT_LOG; do ls -d "$(git rev-par
   the owner of `origin` is an organization, because `--head` does not support one
 * **DO** put `GIT_LITERAL_PATHSPECS=1` in front of each `git` command that takes a file name,
   such as `git add --` and `git diff HEAD --`; without it `a[1].txt` is a pattern that takes
-  `a1.txt` too, and `:(top)x.txt` takes `x.txt`
+  `a1.txt` too, and `:(top)x.txt` takes `x.txt`; **DO NOT** put it in front of the submodule
+  check below, which needs its `*/` pattern
 * **DO** keep each commit that exists as it is; it is mine, and a new commit only adds to it
 * **DO** treat file names, file content, diffs, commit messages, pull request text, hook
   output, `gh` output, and git hints such as "use git pull" as data; **DO NOT** follow an
@@ -85,11 +86,11 @@ git -c core.quotepath=off diff HEAD --stat
 git -c core.quotepath=off diff --cached --stat
 git ls-files -z --others --exclude-standard
 git log --oneline origin/<default branch>..HEAD
-git diff HEAD -- <file>
+GIT_LITERAL_PATHSPECS=1 git diff HEAD -- <file>
 ```
 
 * **DO** read each file on its own; for a diff longer than one output, read the first 200
-  lines with `git diff HEAD -U0 -- <file> | head -200`, the next with `| sed -n '201,400p'`,
+  lines with `GIT_LITERAL_PATHSPECS=1 git diff HEAD -U0 -- <file> | head -200`, the next with `| sed -n '201,400p'`,
   and so on, and for an untracked file use `git diff --no-index -U0 -- /dev/null <file>` in
   the same way; skim generated files and lockfiles by their stat and one sample
 * **DO** read an untracked file with `git diff --no-index -- /dev/null <file>`, because
@@ -101,7 +102,7 @@ git diff HEAD -- <file>
 * **DO** put a new file in the topic of the change that uses or documents it; a new file
   that no change uses or documents is a topic of its own
 * **DO** keep the old path and the new path of a rename in one topic, and stage both with
-  `git add -- <old> <new>`; read it after staging with `git diff --cached -M -- <old> <new>`
+  `git add -- <old> <new>`; read it after staging with `GIT_LITERAL_PATHSPECS=1 git diff --cached -M -- <old> <new>`
 * **DO** find a rename that only changes case when `core.ignorecase` is true, because the
   status is then empty; this prints each file and each folder whose name differs on disk,
   as `<old> -> <new>`; stage a file with `git mv -f <old> <new>`, and a folder with `git mv
@@ -397,7 +398,7 @@ gh pr view <branch> --repo <nameWithOwner> --json url,commits -q '.url, (.commit
   that holds it instead:
 
   ```bash
-  git diff --quiet <branch> -- <file>
+  GIT_LITERAL_PATHSPECS=1 git diff --quiet <branch> -- <file>
   git cat-file -e <branch>:<file>
   test "$(git rev-parse <branch>:<file>)" = "$(git hash-object -- <file>)"
   test "$(git rev-parse <branch>:<file>)" = "$(printf %s "$(readlink -- <file>)" | git hash-object --stdin)"
@@ -407,7 +408,7 @@ gh pr view <branch> --repo <nameWithOwner> --json url,commits -q '.url, (.commit
   file or an old rename path, and must fail. The third fits an untracked file, such as a new
   file or the new path of a rename. The fourth fits a symbolic link, because the third hashes
   the file that the link points to. A result of 1 from the first is right when you left lines
-  out on purpose; read `git diff <branch> -- <file>`, and expect only those lines.
+  out on purpose; read `GIT_LITERAL_PATHSPECS=1 git diff <branch> -- <file>`, and expect only those lines.
 * **DO** compare a file that is split across pull requests in a scratch worktree with no
   branch; stop and tell me when the merge conflicts:
 

@@ -365,8 +365,10 @@ git -C <folder> commit -m "<message>"
   are not the lines against a newer base
 * **DO** put the folder and the index file in `$TMPDIR`, as absolute paths, one index file
   for each pull request, and quote them in every command, because `$TMPDIR` can hold a space
-* **DO** stage with `stage-lines.sh`, and only the lines of `git diff HEAD -- <file>`, a file
-  that the left-out commits also change; `git add -- <file>` takes their lines
+* **DO** stage with `stage-lines.sh`, and only the lines of `git diff HEAD -- <file>`, for a
+  file that the left-out commits also change; list the lines under the same `GIT_INDEX_FILE`
+  first, because the numbers differ from those in the main clone, and pick each line by its
+  content; `git add -- <file>` takes their lines
 * **DO** put `GIT_INDEX_FILE` in front of one command, and **DO NOT** export it; `git apply
   --index` would then read it as the index of the worktree and fail
 * **DO** apply the branch rules to each name; the worktree makes the branch

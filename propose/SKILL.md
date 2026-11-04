@@ -344,6 +344,10 @@ git -C <folder> commit -m "<message>"
 
 * **DO** use `origin/<default branch>` as `<base>`, or the tip of the branch that this one
   stacks on; for the next commit of a topic, read the tree of the tip of its own branch
+* **DO** make a case rename its own commit in the worktree, with `git -C <folder> mv` in the
+  same steps, and read the tree of the branch tip for the next commit; `git mv` in the main
+  clone changes the real index, and `git apply` cannot create `sources/a.txt` while
+  `Sources/a.txt` is on the disk of the worktree
 * **DO** run the command of the branch rules before you use `origin/<default branch>` as
   `<base>`, and stop and ask me when it prints a line; lines that I listed against HEAD
   are not the lines against a newer base

@@ -328,7 +328,7 @@ PR_BODY_END
   with its marks, by real text, which is the only change; keep every heading, line, and
   checkbox as it is, and leave each checkbox unchecked; a section with no comment is fixed,
   such as a checklist, and gets no text; when the template holds no comment, ask me what to
-  write
+  write, and put my text under its first heading
 * **DO** choose the template whose name fits the topic when there are more than one, and
   ask me only when two fit
 * **DO** write a body without a template as a few sentences on what changes and why

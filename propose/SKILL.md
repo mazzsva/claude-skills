@@ -175,8 +175,9 @@ than one pull request, use the newest one:
   not overlap; a switch that does not refuse can still restore a deleted file and lose my
   change; **DO NOT** stash; tell me which files, and ask me whether to branch from the
   current HEAD instead
-* **DO** name the branch in two to four words of kebab case, for the topic and not for the
-  date, in the style that `git branch -r` shows, with its prefix when the style has one
+* **DO** name the branch in two to four words of kebab case, under 40 characters, for the
+  topic and not for the date, in the style that `git branch -r` shows, with its prefix when
+  the style has one; drop the least specific word first when the name is too long
 * **DO** check the name with `git ls-remote --heads origin <new branch>`, `git branch --list
   <new branch>`, and `gh pr list --repo <nameWithOwner> --head <new branch> --state all`;
   all three print nothing; choose another name when `git switch -c` or the push fails on it

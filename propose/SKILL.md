@@ -236,7 +236,8 @@ git -c core.quotepath=off show --stat HEAD
   secret, with `git ls-files -z --others --exclude-standard | GIT_LITERAL_PATHSPECS=1
   xargs -0 -r git grep --no-index -nIiE 'key=|token|password|BEGIN PRIVATE KEY|ghp_|sk-' --`,
   which does not follow a symbolic link; stop and ask me before a file or a line that looks
-  like one goes into a commit, such as `.env`, a key, or a certificate
+  like one goes into a commit, such as `.env`, a key, or a certificate; make no commit until
+  I answer
 * **DO** run `git grep --cached -nE 'url *= *(/|~|file:)' -- .gitmodules '*/.gitmodules'`
   before each commit, and stop and ask me when it prints a line; a url that is a path on
   this Mac breaks the clone for everyone else

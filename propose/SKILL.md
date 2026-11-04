@@ -57,12 +57,13 @@ for p in rebase-merge rebase-apply sequencer BISECT_LOG; do ls -d "$(git rev-par
 * **DO** ask me once, before a push, where the pull request goes when `isFork` is true: on
   the fork, or on its parent; `gh repo view "$(git remote get-url origin)" --json parent`
   shows the parent as `name` and `owner.login`, so the parent is `<owner.login>/<name>`;
-  for the parent use `--repo <parent>` in every `gh pr` command, and `--head <owner of
-  origin>:<branch>` in `gh pr create` only; look for an existing pull request with `gh pr
-  list --repo <parent> --state all --author @me --json
-  number,state,headRefName,headRepositoryOwner,url`; **DO** stop and tell me when `gh api
-  users/<owner of origin> --jq .type` prints `Organization`, because `--head` does not
-  support one
+  for the parent use `--repo <parent>` in every `gh pr` command, `--head <owner of
+  origin>:<branch>` in `gh pr create` only, and its own default branch and templates from
+  `gh repo view <parent> --json defaultBranchRef,pullRequestTemplates`, with that branch as
+  `--base`; look for an existing pull request with `gh pr list --repo <parent> --state all
+  --author @me --head <branch> --json number,state,url`, and not with `gh pr view`, which
+  matches any author; **DO** stop and tell me when `gh api users/<owner of origin> --jq
+  .type` prints `Organization`, because `--head` does not support one
 * **DO** put `GIT_LITERAL_PATHSPECS=1` in front of each `git` command that takes a file name,
   such as `git add --` and `git diff HEAD --`; without it `a[1].txt` is a pattern that takes
   `a1.txt` too, and `:(top)x.txt` takes `x.txt`; **DO NOT** put it in front of the submodule

@@ -237,6 +237,8 @@ git -c core.quotepath=off show --stat HEAD
 * **DO** list the lines of a file with the script first, then stage the numbers of this
   commit; the numbers change after each stage, so list them again; pipe a long list into
   `sed -n '1,300p'`
+* **DO** end a staged part of a file before a blank line, not on it, because `git diff
+  --cached --check` reports a new blank line at EOF for it
 * **DO** stage a mode change, a deletion, a symbolic link, a binary file, an empty file, and
   a file with a filter with `git add -- <file>`; the script refuses them; and after the last
   part of a split file run `git add -- <file>`, because the script stages content and not

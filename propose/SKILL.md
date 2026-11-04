@@ -327,6 +327,8 @@ git -C <folder> commit -m "<message>"
 * **DO** apply the branch rules to each name; the worktree makes the branch
 * **DO** build the pull request that matches the lines that I staged from `git diff
   --cached --binary` of the real index; read it, and **DO NOT** change the index
+* **DO** compare a file that is split across pull requests, as in the verify section, before
+  the first push, so that a conflict stops you before a pull request is open
 * **DO** push, and open the pull request from the worktree, by the sections above
 * **DO** stop and ask me when `git apply` rejects a change
 * **DO NOT** run `git stash`, `git checkout`, or `git reset` in the working tree
@@ -362,6 +364,10 @@ gh pr view <branch> --repo <nameWithOwner> --json url,commits -q '.url, (.commit
   git -C <folder> merge --no-edit <branch> <branch>
   cmp <folder>/<file> <file>
   ```
+
+  When the merge conflicts, run `git -C <folder> merge --abort` before you stop, because a
+  worktree in a merge cannot be removed without `--force`; ignore the error "There is no
+  merge to abort"
 * **DO** run `git -C <submodule> status --short` when the repository has a submodule; the
   first command hides its uncommitted work
 * **DO** give me the link of each pull request, its branch, and one line for each commit

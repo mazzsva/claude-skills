@@ -90,7 +90,8 @@ git diff HEAD -- <file>
 
 * **DO** read each file on its own; for a diff longer than one output, read the first 200
   lines with `git diff HEAD -U0 -- <file> | head -200`, the next with `| sed -n '201,400p'`,
-  and so on, and skim generated files and lockfiles by their stat and one sample
+  and so on, and for an untracked file use `git diff --no-index -U0 -- /dev/null <file>` in
+  the same way; skim generated files and lockfiles by their stat and one sample
 * **DO** read an untracked file with `git diff --no-index -- /dev/null <file>`, because
   `git diff HEAD` prints nothing for it; exit status 1 only says that the file has content
 * **DO** make one topic of the changes that have one reason, such as a fix, a feature, a

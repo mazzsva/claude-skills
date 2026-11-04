@@ -12,8 +12,10 @@ branch that has a good name, and open one pull request for each topic.
 
 ## Quick start
 
-Run every command from the top-level folder. Read names with `-z` when a name can hold a
-quote or a line break; `core.quotepath=off` fixes only non-ASCII names:
+Run every command from the top-level folder. Write a shell variable with braces before a
+colon, such as `${branch}:<file>`, because zsh reads `$branch:logo.png` as a modifier. Read
+names with `-z` when a name can hold a quote or a line break; `core.quotepath=off` fixes
+only non-ASCII names:
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"

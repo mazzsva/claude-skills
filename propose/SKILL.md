@@ -288,9 +288,11 @@ PR_BODY_END
   read the chosen one with `git show origin/<base>:<path>`; GitHub applies the templates of
   the default branch only
 * **DO** copy the `body` of the template from `pullRequestTemplates` when the base is the
-  default branch, and from the file that you read otherwise; replace only each HTML comment with real text, keep every heading, line, and
+  default branch, and from the file that you read otherwise; replace each HTML comment,
+  with its marks, by real text, which is the only change; keep every heading, line, and
   checkbox as it is, and leave each checkbox unchecked; a section with no comment is fixed,
-  such as a checklist, and gets no text
+  such as a checklist, and gets no text; when the template holds no comment, ask me what to
+  write
 * **DO** choose the template whose name fits the topic when there are more than one, and
   ask me only when two fit
 * **DO** write a body without a template as a few sentences on what changes and why

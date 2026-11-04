@@ -49,7 +49,8 @@ for p in rebase-merge rebase-apply sequencer BISECT_LOG; do ls -d "$(git rev-par
 * **DO** open the pull request when the branch is pushed, has none, and I asked for one
 * **DO** stop and ask me when `gh repo view` or `git fetch origin` fails, because the default
   branch and the `origin/*` references are then unknown; when I asked only to commit,
-  commit on the current branch, with no branch rules, and stop after the commit
+  commit on the current branch, with no branch rules and no command that names `origin/*`,
+  and stop after the commit
 * **DO** stop and ask me before a push when there is no `origin` on GitHub, `gh auth status`
   reports the active account as failed, `viewerPermission` is `READ`, or the two URLs of
   `origin` differ; a failed account that is not the active one does not count

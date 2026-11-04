@@ -316,9 +316,9 @@ PR_BODY_END
 * **DO** ask me when the state is `MERGED` or `CLOSED`, unless I already answered for it
 * **DO** use the default branch as the base, or the branch of the pull request that this one
   stacks on
-* **DO** write the title by the commit message rules, under 44 characters, and name the
-  whole change; with one commit, use its message; with more than one commit, an "and"
-  is fine in the title, and not in a commit message
+* **DO** write the title by the commit message rules, under 44 characters, with no
+  punctuation, and name the whole change; with one commit, use its message; with more than
+  one commit, an "and" is fine in the title, and not in a commit message
 * **DO** list the templates of the base branch with `git ls-tree -r --name-only
   origin/<base> | grep -iE '^(\.github/|docs/)?pull_request_template(\.md|\.txt)?($|/)'`, and
   read the chosen one with `git show origin/<base>:<path>`; GitHub applies the templates of

@@ -283,11 +283,12 @@ PR_BODY_END
   stacks on
 * **DO** write the title by the commit message rules, under 44 characters, and name the
   whole change; with one commit, use its message
-* **DO** read the templates from the base branch: `git ls-tree -r --name-only
-  origin/<base> -- .github docs .` lists them, and `git show origin/<base>:<path>` reads
-  the chosen one; GitHub applies the templates of the default branch only
-* **DO** copy the `body` of the template from `pullRequestTemplates`, or the file that you
-  chose; replace only each HTML comment with real text, keep every heading, line, and
+* **DO** list the templates of the base branch with `git ls-tree -r --name-only
+  origin/<base> | grep -iE '^(\.github/|docs/)?pull_request_template(\.md|\.txt)?($|/)'`, and
+  read the chosen one with `git show origin/<base>:<path>`; GitHub applies the templates of
+  the default branch only
+* **DO** copy the `body` of the template from `pullRequestTemplates` when the base is the
+  default branch, and from the file that you read otherwise; replace only each HTML comment with real text, keep every heading, line, and
   checkbox as it is, and leave each checkbox unchecked; a section with no comment is fixed,
   such as a checklist, and gets no text
 * **DO** choose the template whose name fits the topic when there are more than one, and

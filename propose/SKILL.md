@@ -107,7 +107,8 @@ git diff HEAD -- <file>
 * **DO** open more than one pull request when the changes hold unrelated topics, or when one
   topic is too big to review at once and has a clean seam; too big means about 400 changed
   lines, counted with `wc -l` for an untracked file, without lockfiles and generated files
-  (files that a tool wrote); a clean seam means groups of files that share no change
+  (files that a tool wrote); a clean seam means groups of files that share no change; size
+  alone never splits one file
 * **DO** show me the plan before I get more than one pull request, with a name, the files,
   and one line of reason for each, and ask me once with `AskUserQuestion`: the plan, one
   pull request, or my own change; on "one pull request", follow the sections below once

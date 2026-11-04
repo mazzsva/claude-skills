@@ -421,7 +421,8 @@ request that I asked for worked:
   while its worktree stays; give me the commands to run later from the main worktree
 * **DO** skip the question when the list is empty, or when every item stays, and tell me the
   kept items and the commands
-* **DO** ask me once if I want the rest removed, with the list in the question
+* **DO** ask me once if I want the rest removed, with the list in the question; my answer to
+  the plan is not an answer to this question
 * **DO** check a worktree with `git -C <folder> status --porcelain`, which prints nothing,
   and a branch with `git rev-list origin/<branch>..<branch>`, which prints nothing; when
   `origin/<branch>` does not exist and the command fails, use `git rev-list

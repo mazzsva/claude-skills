@@ -83,7 +83,8 @@ for arg in "$@"; do
       *) lo=$part; hi=$part ;;
     esac
     lo=$((10#$lo)); hi=$((10#$hi))
-    [ "$lo" -ge 1 ] && [ "$hi" -le "$total" ] && [ "$lo" -le "$hi" ] ||
+    [ "$lo" -le "$hi" ] || fail "$part is backwards, give the lower number first, such as $hi-$lo"
+    [ "$lo" -ge 1 ] && [ "$hi" -le "$total" ] ||
       fail "$part is outside 1-$total, list the lines again with: stage-lines.sh $path"
     want="$want $lo-$hi"
   done

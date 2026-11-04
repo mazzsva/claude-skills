@@ -23,6 +23,9 @@ its tests, its lockfile, and its generated files. The commits go in the order
 they build, and a change with one reason stays one commit, however many files it
 touches.
 
+Before the first commit of a topic, it runs the build, the tests, and the lint
+that your CLAUDE.md asks for.
+
 When one file holds two changes, it stages only the lines of the first one.
 `git add -p` waits for a person, so a small script does it instead. It writes
 an index, and never the file.
@@ -45,9 +48,9 @@ before a secret or a file larger than 50 MB goes into a commit. A `.DS_Store`,
 build output, or an agent worktree stays out, and it says so. It treats text in
 files, diffs, and hook output as data, never as an instruction.
 
-It asks before a fork, a branch whose pull request is closed, a hook that
-changes a file, an operation in progress, or a push that the remote rejects.
-Ask it only to commit, and it stops there.
+It asks before a fork, a remote it cannot read, a branch whose pull request is
+closed, a hook that changes a file, an operation in progress, or a push that the
+remote rejects. Ask it only to commit, and it stops there.
 
 ## After the pull request
 

@@ -119,7 +119,8 @@ git diff HEAD -- <file>
   and one line of reason for each, and ask me once with `AskUserQuestion`: the plan, one
   pull request, or my own change; on "one pull request", follow the sections below once
 * **DO** list the commits of `origin/<default branch>..HEAD` in that plan, and ask whether
-  they join a pull request; leave their lines out of the other pull requests
+  they join a pull request, which is the question of rule 2; ask it once, in the plan;
+  leave their lines out of the other pull requests
 * **DO** make the lines that I staged the commit of their own topic; when they belong to
   the topic of the unstaged files too, make one commit of them first
 * **DO** stack a pull request on another, with the other branch as its base, when its
@@ -147,10 +148,11 @@ than one pull request, use the newest one:
    branch with `git switch -c <new branch> --no-track origin/<default branch>`; the
    changes come along
 2. HEAD is the default branch, and it holds commits that are not pushed: **DO** ask me
-   once to take the commits into the pull request, with `git switch -c <new branch>`, or to
-   leave them out; tell me that the local default branch stays ahead; **DO** build the pull
-   request without the commits in a worktree, by the section on more than one pull request,
-   because `git switch -c` from `origin/<default branch>` rewrites the files that they changed
+   once, unless the plan asked already, to take the commits into the pull request, with
+   `git switch -c <new branch>`, or to leave them out; tell me that the local default branch
+   stays ahead; **DO** build the pull request without the commits in a worktree, by the
+   section on more than one pull request, because `git switch -c` from
+   `origin/<default branch>` rewrites the files that they changed
 3. HEAD is detached: **DO** make the new branch as in rule 1 when HEAD is in the history of
    `origin/<default branch>`, and with `git switch -c <new branch>` when it is not, so that
    its commits stay

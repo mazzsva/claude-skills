@@ -369,11 +369,13 @@ gh pr view <branch> --repo <nameWithOwner> --json url,commits -q '.url, (.commit
   git diff --quiet <branch> -- <file>
   git cat-file -e <branch>:<file>
   test "$(git rev-parse <branch>:<file>)" = "$(git hash-object -- <file>)"
+  test "$(git rev-parse <branch>:<file>)" = "$(printf %s "$(readlink -- <file>)" | git hash-object --stdin)"
   ```
 
   The first fits a tracked file, and prints nothing when equal. The second fits a deleted
   file or an old rename path, and must fail. The third fits an untracked file, such as a new
-  file or the new path of a rename. A result of 1 from the first is right when you left lines
+  file or the new path of a rename. The fourth fits a symbolic link, because the third hashes
+  the file that the link points to. A result of 1 from the first is right when you left lines
   out on purpose; read `git diff <branch> -- <file>`, and expect only those lines.
 * **DO** compare a file that is split across pull requests in a scratch worktree with no
   branch; stop and tell me when the merge conflicts:

@@ -191,6 +191,11 @@ git -c core.quotepath=off show --stat HEAD
 * **DO** give each commit one change that a reviewer can read alone
 * **DO** order the commits so that each one builds; when the repository has no build, so that
   each one reads alone; a new type comes before its first use
+* **DO** run the build, the tests, and the lint that CLAUDE.md asks for before the first
+  commit of a topic; tell me in the report when the project has none; **DO** stop and tell
+  me, with the first error, when one fails
+* **DO** leave out the files that a check wrote, such as build output; **DO** stop and tell
+  me when a check changed a tracked file, and **DO NOT** revert it
 * **DO** use one commit when all of the changes of a topic have one reason; a logical chunk
   means one change, not one file
 * **DO** treat lines that I staged, when they are not all of the changes, as one commit I

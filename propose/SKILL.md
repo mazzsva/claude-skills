@@ -82,6 +82,8 @@ git diff HEAD -- <file>
 * **DO** read each file on its own; for a diff longer than one output, read the first 200
   lines with `git diff HEAD -U0 -- <file> | head -200`, the next with `| sed -n '201,400p'`,
   and so on, and skim generated files and lockfiles by their stat and one sample
+* **DO** read an untracked file with `git diff --no-index -- /dev/null <file>`, because
+  `git diff HEAD` prints nothing for it; exit status 1 only says that the file has content
 * **DO** make one topic of the changes that have one reason, such as a fix, a feature, a
   refactor, a dependency update, or a format change; a reviewer can approve a topic alone
 * **DO** keep a topic together with its tests, its lockfile, its generated files, and its

@@ -218,12 +218,14 @@ than one pull request, use the newest one:
 
 ## How to commit
 
-Stage whole files by name, and split a file with the script in the skill directory:
+Stage whole files by name, and split a file with a patch that holds only the lines of this
+commit:
 
 ```bash
 GIT_LITERAL_PATHSPECS=1 git add -- <file> <file>
-bash <skill directory>/stage-lines.sh <file>
-bash <skill directory>/stage-lines.sh <file> 3-7 12
+git diff -U0 --no-color --no-ext-diff -- <file>
+git apply --cached --recount --unidiff-zero --whitespace=nowarn "${TMPDIR:-/tmp}/part.patch"
+git diff --cached -- <file>
 git diff --cached --check
 git diff --cached
 git -c core.quotepath=off status --short
@@ -251,15 +253,35 @@ git -c core.quotepath=off show --stat HEAD
   made ready
 * **DO** split a commit whose message needs an "and" to name it; that is two changes, even
   in one file
-* **DO** list the lines of a file with the script first, then stage the numbers of this
-  commit; the numbers change after each stage, so list them again; pipe a long list into
-  `sed -n '1,300p'`
+* **DO** write the patch of a part with `Write`, in `$TMPDIR`: copy the `diff --git`, `---`,
+  and `+++` lines of the `-U0` diff, then copy each wanted hunk as it is; with `-U0` each
+  hunk stands alone, so you can leave a hunk out; run the diff again after each stage,
+  because the old line numbers change; for a file that is not tracked, run `git add -N --
+  <file>` first, so that the diff lists it
+* **DO** split a hunk only like this: leave out any `+` line of it; leave out a `-` line
+  only at the start or the end of its run of `-` lines, and add 1 to both start numbers of
+  the `@@` line for each `-` line that you left out at the start, when the hunk has no `+`
+  line; keep the `-` lines and the `+` lines of a replaced line together; when a change
+  needs more than this, use the fallback below
+* **DO** read `git diff --cached -- <file>` after each stage: it must show only the lines of
+  this commit, and `git diff -- <file>` must show the rest; save `git ls-files -s -- <file>`
+  before the stage; `git apply` changes nothing when it rejects a patch, and when the result
+  is wrong, put the saved mode and hash back with `git update-index --cacheinfo`, run the
+  diff again, and write the patch once more; **DO NOT** use `git reset`, because it drops
+  lines that I staged
+* **DO** use this fallback when the second patch fails, or the hunk needs a finer split:
+  write the version of the file that this commit needs to `$TMPDIR/<name>.new`, then
+  `git update-index --add --cacheinfo <mode>,"$(git hash-object -w --no-filters --
+  "$TMPDIR/<name>.new")",<path>` with the mode from `git ls-files -s -- <file>`, and read
+  `git diff --cached -- <file>`; take the new text from the file, and change only the lines
+  of this commit
 * **DO** end a staged part of a file before a blank line, not on it, because `git diff
   --cached --check` reports a new blank line at EOF for it
 * **DO** stage a mode change, a deletion, a symbolic link, a binary file, an empty file, and
-  a file with a filter with `GIT_LITERAL_PATHSPECS=1 git add -- <file>`; the script refuses
-  them; and after the last part of a split file run `GIT_LITERAL_PATHSPECS=1 git add --
-  <file>`, because the script stages content and not the mode
+  a file with a filter with `GIT_LITERAL_PATHSPECS=1 git add -- <file>`; a patch cannot
+  carry them safely; and after the last part of a split file run
+  `GIT_LITERAL_PATHSPECS=1 git add -- <file>`, because the patch stages content and not the
+  mode
 * **DO** pass a name to `git add --` as a real path, never as the quoted text of a listing,
   and without a trailing slash for a link
 * **DO** read `git diff --cached` before each commit; it is the commit
@@ -361,14 +383,15 @@ PR_BODY_END
 ## How to build more than one pull request
 
 Build each pull request in its own worktree, so that the working tree and the index stay
-as they are. Run `git` with `GIT_INDEX_FILE` and `stage-lines.sh` in the main clone, and
+as they are. Run `git` with `GIT_INDEX_FILE` in the main clone, and
 everything else with `git -C <folder>`:
 
 ```bash
 git worktree add -b <branch> --no-track <folder> <base>
 GIT_INDEX_FILE=<index file> git read-tree <base>
 GIT_INDEX_FILE=<index file> GIT_LITERAL_PATHSPECS=1 git add -- <file>
-GIT_INDEX_FILE=<index file> bash <skill directory>/stage-lines.sh <file> 3-7
+GIT_INDEX_FILE=<index file> git diff -U0 --no-color --no-ext-diff -- <file>
+GIT_INDEX_FILE=<index file> git apply --cached --recount --unidiff-zero --whitespace=nowarn "<patch file>"
 GIT_INDEX_FILE=<index file> git diff --cached --binary <base> | git -C <folder> apply --index
 git -C <folder> commit -m "<message>"
 ```
@@ -384,10 +407,11 @@ git -C <folder> commit -m "<message>"
   are not the lines against a newer base
 * **DO** put the folder and the index file in `$TMPDIR`, as absolute paths, one index file
   for each pull request, and quote them in every command, because `$TMPDIR` can hold a space
-* **DO** stage with `stage-lines.sh`, and only the lines of `git diff HEAD -- <file>`, for a
-  file that the left-out commits also change; list the lines under the same `GIT_INDEX_FILE`
-  first, because the numbers differ from those in the main clone, and pick each line by its
-  content; `git add -- <file>` takes their lines
+* **DO** stage with a patch, by the rules of the commit section, and only the lines of
+  `git diff HEAD -- <file>`, for a file that the left-out commits also change; make the
+  diff under the same `GIT_INDEX_FILE` first, because its line numbers differ from those in
+  the main clone, and pick each line by its content; `git add -- <file>` takes all their
+  lines; use `git add -N` on the same index file for a file that is not tracked
 * **DO** put `GIT_INDEX_FILE` in front of one command, and **DO NOT** export it; `git apply
   --index` would then read it as the index of the worktree and fail
 * **DO** apply the branch rules to each name; the worktree makes the branch

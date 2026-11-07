@@ -27,8 +27,8 @@ Before the first commit of a topic, it runs the build, the tests, and the lint
 that your CLAUDE.md asks for.
 
 When one file holds two changes, it stages only the lines of the first one.
-`git add -p` waits for a person, so a small script does it instead. It writes
-an index, and never the file.
+`git add -p` waits for a person, so it writes a patch of those lines and applies
+it to the index with `git apply --cached`. It never changes the file.
 
 ## How it names the branch
 

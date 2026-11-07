@@ -250,33 +250,54 @@ git -c core.quotepath=off show --stat HEAD
 * **DO** use one commit when all of the changes of a topic have one reason; a logical chunk
   means one change, not one file
 * **DO** treat lines that I staged, when they are not all of the changes, as one commit I
-  made ready
+  made ready; commit them as they are before any `git apply`, so that
+  `git diff --cached` never mixes my lines with yours
 * **DO** split a commit whose message needs an "and" to name it; that is two changes, even
   in one file
-* **DO** write the patch of a part with `Write`, in `$TMPDIR`: copy the `diff --git`, `---`,
-  and `+++` lines of the `-U0` diff, then copy each wanted hunk as it is; with `-U0` each
-  hunk stands alone, so you can leave a hunk out; run the diff again after each stage,
-  because the old line numbers change; for a file that is not tracked, run `git add -N --
-  <file>` first, so that the diff lists it
+* **DO** write the patch of a part with `printf` in Bash when the file has CRLF line ends,
+  and with `Write`, in `$TMPDIR`, for any other file; `Write` can drop a carriage return; copy
+  the `diff --git`, `---`, and `+++` lines of the `-U0` diff exactly, then copy each wanted
+  hunk; with `-U0` each hunk stands alone, so you can leave a hunk out
+* **DO NOT** copy the `old mode`, `new mode`, `deleted file mode`, and `index` lines; **DO
+  NOT** write a patch with `+++ /dev/null`, because it leaves an empty file and no deletion;
+  use the path from `git ls-files`, not the path on the disk
+* **DO** run `git add -N -- <file>` first for a file that is not tracked; its diff has `---
+  /dev/null`, so copy the `new file mode` line too, and keep the `+` lines that you want
+* **DO** write each patch from the output of a `-U0` diff that you ran after the last stage,
+  and from no older one, because the old line numbers change after each stage
+* **DO** copy the line `\ No newline at end of file` with the line above it; when you leave
+  that line out, leave the marker out too
 * **DO** split a hunk only like this: leave out any `+` line of it; leave out a `-` line
-  only at the start or the end of its run of `-` lines, and add 1 to both start numbers of
-  the `@@` line for each `-` line that you left out at the start, when the hunk has no `+`
-  line; keep the `-` lines and the `+` lines of a replaced line together; when a change
-  needs more than this, use the fallback below
-* **DO** read `git diff --cached -- <file>` after each stage: it must show only the lines of
-  this commit, and `git diff -- <file>` must show the rest; save `git ls-files -s -- <file>`
-  before the stage; `git apply` changes nothing when it rejects a patch, and when the result
-  is wrong, put the saved mode and hash back with `git update-index --cacheinfo`, run the
-  diff again, and write the patch once more; **DO NOT** use `git reset`, because it drops
-  lines that I staged
-* **DO** use this fallback when the second patch fails, or the hunk needs a finer split:
-  write the version of the file that this commit needs to `$TMPDIR/<name>.new`, then
-  `git update-index --add --cacheinfo <mode>,"$(git hash-object -w --no-filters --
-  "$TMPDIR/<name>.new")",<path>` with the mode from `git ls-files -s -- <file>`, and read
-  `git diff --cached -- <file>`; take the new text from the file, and change only the lines
-  of this commit
-* **DO** end a staged part of a file before a blank line, not on it, because `git diff
-  --cached --check` reports a new blank line at EOF for it
+  only at the start or the end of its run of `-` lines, and add 1 to the first start number
+  for each `-` line that you left out at the start; keep the `-` lines and the `+` lines of
+  a replaced line together; when a change needs more than this, use the fallback below
+* **DO** set the second start number of a hunk with no `-` line to the line that its first
+  `+` line gets in the file as staged: the first start number, plus 1, plus the `+` lines
+  minus the `-` lines of the hunks before it in your patch; `git apply` places the lines
+  by this number and not by the first one, so a copied number is wrong after you left out
+  an earlier hunk, and the lines go to the wrong place with exit status 0; a hunk with a
+  `-` line ignores the second number
+* **DO** read `git diff --cached -- <file>` after each stage, and compare its `@@` lines
+  with your patch: it must show only the lines of this commit, and `git diff -- <file>`
+  must show the rest; `-U0` has no context, so a line that appears more than once can land
+  at the wrong line with no error
+* **DO** save `git -c core.quotepath=off ls-files -s -- <file>` before every stage, as
+  `<mode>,<hash>,<path>` with the real path, never the quoted one; `git apply` changes
+  nothing when it rejects a patch; when `git diff --cached` is wrong although `git apply`
+  printed nothing, put the saved entry back with `git update-index --cacheinfo`, run the
+  diff again, and write the patch once more; **DO NOT** use `git reset` or `git stash`,
+  because they drop lines that I staged and the `git add -N` entry of a new file
+* **DO** use this fallback when the second patch is wrong or fails, or the hunk needs a
+  finer split: write the version of the file that this commit needs to `$TMPDIR/<name>.new`,
+  in the form that the index holds, which is LF line ends after the clean filter, because
+  `--no-filters` stores the bytes as they are; then `git update-index --add --cacheinfo
+  <mode>,"$(git hash-object -w --no-filters -- "$TMPDIR/<name>.new")",<path>` with the mode
+  from `git ls-files -s -- <file>`, or 100644 or 100755 for a file that is not tracked;
+  read `git diff --cached -- <file>` and `git diff --cached --summary`, so that a wrong
+  mode shows; take the new text from the file, and change only the lines of this commit
+* **DO** keep a staged file from ending on a blank line, because `git diff --cached --check`
+  reports a new blank line at EOF for it; move that blank line to the next part, or add the
+  line after it to this part; a blank line in the middle is fine
 * **DO** stage a mode change, a deletion, a symbolic link, a binary file, an empty file, and
   a file with a filter with `GIT_LITERAL_PATHSPECS=1 git add -- <file>`; a patch cannot
   carry them safely; and after the last part of a split file run
@@ -288,7 +309,8 @@ git -c core.quotepath=off show --stat HEAD
 * **DO** stop and tell me when `git diff --cached --check` prints a line for a line that you
   added; for a file with CRLF line ends run `git -c core.whitespace=cr-at-eol diff --cached
   --check` instead, which ignores only the carriage return; tell me when `git ls-files --eol`
-  shows `i/mixed` for a staged file; never fix the file; ignore the warning "LF will be
+  shows `i/mixed` for a staged file and did not before the stage, and the same for a file
+  with mixed line ends; never fix the file; ignore the warning "LF will be
   replaced"
 * **DO** follow the commit message rules of CLAUDE.md; when there are none, match the
   style of `git log --oneline`; a commit has one `-m`, no body, and no trailer, and no line
@@ -405,6 +427,10 @@ git -C <folder> commit -m "<message>"
 * **DO** run the command of the branch rules before you use `origin/<default branch>` as
   `<base>`, and stop and ask me when it prints a line; lines that I listed against HEAD
   are not the lines against a newer base
+* **DO NOT** reuse a patch file after the base moved: write a new one from `git read-tree`
+  and `git diff -U0`, because `-U0` has no context, and `git apply` can match the same
+  text at another line and exit 0; leave out each hunk that reverts a change that the base
+  holds, because `git add -- <file>` of a whole file would revert it
 * **DO** put the folder and the index file in `$TMPDIR`, as absolute paths, one index file
   for each pull request, and quote them in every command, because `$TMPDIR` can hold a space
 * **DO** stage with a patch, by the rules of the commit section, and only the lines of
@@ -413,7 +439,9 @@ git -C <folder> commit -m "<message>"
   the main clone, and pick each line by its content; `git add -- <file>` takes all their
   lines; use `git add -N` on the same index file for a file that is not tracked
 * **DO** put `GIT_INDEX_FILE` in front of one command, and **DO NOT** export it; `git apply
-  --index` would then read it as the index of the worktree and fail
+  --index` would then read it as the index of the worktree and fail, and `git commit` and
+  `git add` would use it without an error; when you exported it, run `unset GIT_INDEX_FILE`,
+  and read `git -C <folder> log` and `git -C <folder> status`
 * **DO** apply the branch rules to each name; the worktree makes the branch
 * **DO** build the pull request that matches the lines that I staged from `git diff
   --cached --binary` of the real index; read it, and **DO NOT** change the index

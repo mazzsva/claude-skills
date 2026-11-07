@@ -178,8 +178,11 @@ GIT_LITERAL_PATHSPECS=1 git diff HEAD -- <file>
   the pull request that joins them, also a deletion
 * **DO** make the lines that I staged the commit of their own topic; when they belong to
   the topic of the unstaged files too, make one commit of them first
+* **DO** use the default branch as the base of the first pull request, unless I name
+  another branch
 * **DO** stack a pull request on another, with the other branch as its base, when its
-  change needs the other change to build; **DO** say so in its body, inside the text that
+  change needs the other change to build, or when both change adjacent lines of one file,
+  because they would conflict on merge; **DO** say so in its body, inside the text that
   replaces the first comment of the template
 * **DO** make a pull request from the default branch when its change stands alone
 * **DO NOT** split one change to make more pull requests; two small pull requests that
@@ -338,12 +341,13 @@ git log -1 --format=%b
 * **DO** take the diff of a file that is not tracked with `GIT_LITERAL_PATHSPECS=1 git diff
   --no-index -U0 --no-color -- /dev/null <file>`, and copy its `new file mode` line too, and
   keep the `+` lines that you want; the first stage makes the index entry, so the plain
-  `-U0` diff lists the rest; copy the `---` and `+++` lines exactly, with the tab and the
-  quotes of a name that has a space
+  `-U0` diff lists the rest; the `new file mode` line is required for a `--- /dev/null`
+  patch, and the tab after a name with a space is optional
 * **DO** write each patch from the output of a `-U0` diff that you ran after the last stage,
   and from no older one, because the old line numbers change after each stage
 * **DO** use the fallback below, and no patch, for a file whose diff holds the line `\ No
-  newline at end of file`, or whose index version lacks the final line end; `git apply`
+  newline at end of file`, or whose index version lacks the final line end, which you check
+  in every round with `git show :<file> | tail -c1 | xxd`; `git apply`
   can join a line to a last line that has no line end, or delete the wrong one of two equal
   last lines, with exit status 0
 * **DO** split a hunk only like this: leave out any `+` line of it; leave out a `-` line
@@ -359,15 +363,21 @@ git log -1 --format=%b
   exit status 0, also for a hunk of only `-` lines; let `net` be the `+` lines minus the `-`
   lines of the hunks before it in your patch; for a hunk with a `-` line, write the first
   start number plus `net`; for a hunk with no `-` line, write the first start number, which
-  is the line after which the lines go, plus 1, plus `net`
+  is the line after which the lines go, plus 1, plus `net`; the number that you write can
+  differ from the one that git prints, which is right; for example, git prints `@@ -4,0 +6
+  @@` for the second of two added lines, and you write `@@ -4,0 +5 @@` when you leave the
+  first one out
 * **DO** read the staged part of a split file as one whole change: a `+` line that only
   closes or opens a block, such as `}`, belongs with its block, because the diff can align
   the `+` lines on a line that the old text also holds, and a patch that drops the `-`
-  lines then moves a block into the wrong function; when the `+` lines of a hunk are not
-  a block that makes sense alone, use the fallback, and check the staged text with the
-  build or the type check when that is cheap
+  lines then moves a block into the wrong function, with exit status 0; after each stage of
+  a split file of code, run the build or the type check on the staged text, which you
+  write with `git show :<file>`, and when it fails, roll back and use the fallback; when
+  the language has no check, use the fallback if the `+` lines that you keep hold more
+  `(`, `{`, or `[` than closing ones, or the reverse
 * **DO** read `git -c core.quotepath=off diff --cached -- <file>` after each stage, and
-  compare its `@@` lines with your patch: it must show only the lines of this commit, and
+  compare its `@@` lines with your patch, or the staged file with the `.new` file by `cmp`
+  after a fallback: it must show only the lines of this commit, and
   `git diff -- <file>` must show the rest; for a file with a line that appears more than
   once, compare the staged text with the text that you expect, because exit status 0 does
   not prove that the right line changed
@@ -453,8 +463,13 @@ git log -1 --format=%b
   `git commit`, and stop when it differs, because a hook edited the working tree
 * **DO** leave a commit that the checks above reject on the local branch, push nothing,
   and tell me its hash, the extra lines, and whether a hook edited the working file; offer
-  to remove the hook when it is mine, to run `git reset --soft HEAD~1`, and to restore the
-  working file; run none of them without my yes
+  to remove the hook when it is mine, to run `git reset --soft HEAD~1`, then to put the
+  index back to the tree that you saved as `$before` with `git read-tree <before>`, which
+  leaves the working tree as it is, and to restore the working file; run none of them
+  without my yes; `git reset --soft` alone keeps the lines that the hook staged, so
+  compare `git write-tree` with `$before` before the next commit; keep `$before` in a file
+  in `$work`, because the variable is gone after the call; in the worktree of a multi
+  pull request, `git -C <folder> read-tree -u --reset <before>` puts back its files too
 * **DO** offer to remove a branch that you made and did not push, with `git worktree
   remove` and `git branch -D`, and to build it again, when it holds a wrong commit; run
   none of them without my yes
@@ -629,7 +644,8 @@ git -C <folder> log -1 --format=%b
 * **DO** push, and open the pull request from the worktree, by the sections above
 * **DO** stop and ask me when `git apply` rejects a change; tell me the worktree, the branch,
   and the index file that you made, which stay until I answer
-* **DO NOT** run `git stash`, `git checkout`, or `git reset` in the working tree
+* **DO NOT** run `git stash`, `git checkout`, or `git reset` in the working tree of the
+  main clone
 
 ## How to verify
 

@@ -256,9 +256,15 @@ of rule 4 too when an older one is `MERGED`:
 * **DO** stop when it prints a line, or when `git switch -c` refuses, even where the lines do
   not overlap; a switch that does not refuse can still restore a deleted file and lose my
   change; **DO NOT** stash; tell me which files, and ask me whether to branch from the
-  current HEAD instead, or from the new `origin/<default branch>`; when I choose the new
-  base, write each patch again from `git read-tree origin/<default branch>`, and leave out
-  each hunk that reverts the base
+  current HEAD instead, or from the new `origin/<default branch>`; say in the question that
+  a branch from HEAD lacks the new commits of the default branch, and its pull request can
+  conflict on merge; when I choose the new base, write each patch again from `git read-tree
+  origin/<default branch>`, and leave out each hunk that reverts the base; when the new
+  base deleted a file that I changed, no patch can carry that file, so tell me which file
+  and which lines, and ask whether to restore the file in a commit of its own, to branch
+  from HEAD, or to drop the change; when the base holds a file with the name of my new
+  file, show me both versions, and ask whether to keep the lines of the base, mine, or to
+  rename mine
 * **DO** name the branch in two to four words of kebab case, under 40 characters, for the
   topic and not for the date, in the style that `git branch -r` shows, with its prefix when
   the style has one, or with the prefix that I gave; drop the least specific word first
@@ -537,12 +543,15 @@ gh pr view <branch> --repo <target repo> --json title,body,baseRefName,headRefNa
   retarget this one with `gh pr edit --base` to the `baseRefName` of the merged pull
   request, which is the default branch only when it merged there, and which I allow with a
   yes, or to leave it; after a squash merge the branch still holds the old commits, so
-  offer a new branch from `origin/<default branch>` too; tell me that the line "stacks on"
+  offer a new branch from `origin/<baseRefName of the merged pull request>` too; tell me
+  that the line "stacks on"
   of the body is then stale, and leave it until I ask
 * **DO** ask me once, and **DO NOT** retarget, when the pull request that this one stacks
   on is `CLOSED`, because its commits are not in the default branch, and a retarget would
   pull them in; offer to keep the base, or to build a new branch
-* **DO** check a new pull request with `gh pr view`, not `gh pr list`, which can lag
+* **DO** check a new pull request with `gh pr view`, not `gh pr list`, which can lag, and
+  run `gh pr view <branch> --repo <target repo> --json mergeable,mergeStateStatus`; tell me
+  when it says `CONFLICTING`
 * **DO** use the default branch as the base, or the branch of the pull request that this one
   stacks on; the template comes from the base that you pass to `--base`
 * **DO** give the title in single quotes, and reword it when it holds a `'`; read the title
@@ -563,11 +572,13 @@ gh pr view <branch> --repo <target repo> --json title,body,baseRefName,headRefNa
   heading, line, and checkbox as it is; never check a box, and keep a box that the
   template checks already; a section with no comment is fixed,
   such as a checklist, and gets no text; when the template holds no comment, ask me what to
-  write, and put my text under its first heading, with a blank line before and after it,
-  or after its first line when it has no heading
+  write, and put my text as its own paragraph directly after its first heading, with one
+  blank line before it and one after it, and keep every line of the template; when it has no
+  heading, put the paragraph after its first line
 * **DO** choose the template whose name fits the topic when there are more than one, and
   ask me when two fit, when none fits, or when both a single-file template and a folder of
-  templates exist
+  templates exist, and offer `.github/pull_request_template.md` as the suggestion, because
+  my CLAUDE.md names that file
 * **DO** write a body without a template as a few sentences on what changes and why
 * **DO** end the body at its last line of text, with no blank line, because the here-document
   adds a line end
@@ -657,7 +668,8 @@ gh pr view <branch> --repo <target repo> --json url,commits -q '.url, (.commits[
 * **DO** expect the first command to print only the files that I chose to leave out; any
   other line is a change that is in no commit
 * **DO** expect the first command to list every proposed file when you built more than one
-  pull request, because HEAD holds none of them; compare each file with the top branch
+  pull request, or the only one in a worktree, because HEAD holds none of them; the
+  untracked-file check differs by design for a file whose lines you left out; compare each file with the top branch
   that holds it instead:
 
   ```bash

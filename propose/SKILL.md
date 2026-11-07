@@ -36,6 +36,11 @@ for ref in MERGE_HEAD CHERRY_PICK_HEAD REVERT_HEAD; do git rev-parse -q --verify
 for p in rebase-merge rebase-apply sequencer BISECT_LOG; do ls -d "$(git rev-parse --git-path "$p")" 2>/dev/null; done
 ```
 
+* **DO** run `pwd` and `git remote get-url origin` first, and stop when they do not name the
+  repository that I mean; the shell can start in another repository, and `cd` to its
+  top-level folder then succeeds there
+* **DO** ask in plain text, and wait, when `AskUserQuestion` is not available; when nobody
+  can answer, stop and tell me the question
 * **DO** stop after the last step I asked for; "commit" ends after the commits, and "push"
   ends after the push
 * **DO** stop and ask me when the check for an operation prints a line; a commit now
@@ -200,10 +205,12 @@ than one pull request, use the newest one:
 * **DO** stop when it prints a line, or when `git switch -c` refuses, even where the lines do
   not overlap; a switch that does not refuse can still restore a deleted file and lose my
   change; **DO NOT** stash; tell me which files, and ask me whether to branch from the
-  current HEAD instead
+  current HEAD instead, or from the new `origin/<default branch>`; when I choose the new
+  base, write each patch again from `git read-tree origin/<default branch>`, and leave out
+  each hunk that reverts the base
 * **DO** name the branch in two to four words of kebab case, under 40 characters, for the
   topic and not for the date, in the style that `git branch -r` shows, with its prefix when
-  the style has one; drop the least specific word first when the name is too long
+  the style has one, or with the prefix that I gave; drop the least specific word first when the name is too long
 * **DO** check the name with `git ls-remote --heads origin <new branch>`, `git branch --list
   <new branch>`, and `gh pr list --repo <nameWithOwner> --head <new branch> --state all`;
   all three print nothing; choose another name when any of them prints a line, even a closed
@@ -222,9 +229,10 @@ Stage whole files by name, and split a file with a patch that holds only the lin
 commit:
 
 ```bash
+work=$(mktemp -d "${TMPDIR:-/tmp}/propose.XXXXXX")
 GIT_LITERAL_PATHSPECS=1 git add -- <file> <file>
 git diff -U0 --no-color --no-ext-diff -- <file>
-git apply --cached --recount --unidiff-zero --whitespace=nowarn "${TMPDIR:-/tmp}/part.patch"
+git apply --cached --recount --unidiff-zero --whitespace=nowarn "$work/part.patch"
 git diff --cached -- <file>
 git diff --cached --check
 git diff --cached
@@ -235,41 +243,52 @@ git -c core.quotepath=off show --stat HEAD
 ```
 
 * **DO** give each commit one change that a reviewer can read alone
+* **DO** make one folder with `mktemp -d` for all of the temporary files of this run, as
+  `$work` shows, and use no fixed name in a shared folder, because another run can write
+  the same file; remove it at the end
 * **DO** order the commits so that each one builds; when the repository has no build, so that
   each one reads alone; a new type comes before its first use
 * **DO** run the build, the tests, and the lint that CLAUDE.md asks for before the first
   commit of a topic; tell me in the report when the project has none, and that the checks
-  ran on the working tree and not on each commit; **DO** stop and tell me, with the first
+  ran on the working tree and not on each commit; for plain Swift sources with no package,
+  run `swiftc -typecheck` on them, and tell me which check you ran; **DO** stop and tell me, with the first
   error, when one fails
 * **DO** leave out the files that a check wrote, such as build output; **DO** save the
   untracked files with `git ls-files -z --others --exclude-standard >
-  "${TMPDIR:-/tmp}/untracked.list"`, and compare `{ git diff HEAD; xargs -0 -r shasum --
-  < "${TMPDIR:-/tmp}/untracked.list" 2>&1; } | shasum` before and after the checks, because
+  "$work/untracked.list"`, and compare `{ git diff HEAD; xargs -0 -r shasum --
+  < "$work/untracked.list" 2>&1; } | shasum` before and after the checks, because
   a status misses a file that I already changed; stop and tell me when the two differ, and
   **DO NOT** revert it
 * **DO** use one commit when all of the changes of a topic have one reason; a logical chunk
   means one change, not one file
 * **DO** treat lines that I staged, when they are not all of the changes, as one commit I
   made ready; commit them as they are before any `git apply`, so that
-  `git diff --cached` never mixes my lines with yours
+  `git diff --cached` never mixes my lines with yours; when they use a file that is not
+  staged, that commit does not build alone, so ask me in the plan whether to add that file
+  to it, and say in the report when it stays as it is
 * **DO** split a commit whose message needs an "and" to name it; that is two changes, even
   in one file
 * **DO** write the patch of a part with `printf` in Bash when the file has CRLF line ends,
-  and with `Write`, in `$TMPDIR`, for any other file; `Write` can drop a carriage return; copy
+  and with `Write`, in `$work`, for any other file; `Write` can drop a carriage return; copy
   the `diff --git`, `---`, and `+++` lines of the `-U0` diff exactly, then copy each wanted
   hunk; with `-U0` each hunk stands alone, so you can leave a hunk out
 * **DO NOT** copy the `old mode`, `new mode`, `deleted file mode`, and `index` lines; **DO
   NOT** write a patch with `+++ /dev/null`, because it leaves an empty file and no deletion;
   use the path from `git ls-files`, not the path on the disk
-* **DO** run `git add -N -- <file>` first for a file that is not tracked; its diff has `---
-  /dev/null`, so copy the `new file mode` line too, and keep the `+` lines that you want
+* **DO** take the diff of a file that is not tracked with `GIT_LITERAL_PATHSPECS=1 git diff
+  --no-index -U0 --no-color -- /dev/null <file>`, and copy its `new file mode` line too, and
+  keep the `+` lines that you want; the first stage makes the index entry, so the plain
+  `-U0` diff lists the rest; copy the `---` and `+++` lines exactly, with the tab and the
+  quotes of a name that has a space
 * **DO** write each patch from the output of a `-U0` diff that you ran after the last stage,
   and from no older one, because the old line numbers change after each stage
 * **DO** copy the line `\ No newline at end of file` with the line above it; when you leave
   that line out, leave the marker out too
 * **DO** split a hunk only like this: leave out any `+` line of it; leave out a `-` line
   only at the start or the end of its run of `-` lines, and add 1 to the first start number
-  for each `-` line that you left out at the start; keep the `-` lines and the `+` lines of
+  for each `-` line that you left out at the start; when this leaves a hunk with no `-`
+  line, write its first start number as the line after which the lines go; one hunk can
+  hold two topics, and these rules split it; keep the `-` lines and the `+` lines of
   a replaced line together; when a change needs more than this, use the fallback below
 * **DO** set the second start number of a hunk with no `-` line to the line that its first
   `+` line gets in the file as staged: the first start number, plus 1, plus the `+` lines
@@ -286,12 +305,12 @@ git -c core.quotepath=off show --stat HEAD
   nothing when it rejects a patch; when `git diff --cached` is wrong although `git apply`
   printed nothing, put the saved entry back with `git update-index --cacheinfo`, run the
   diff again, and write the patch once more; **DO NOT** use `git reset` or `git stash`,
-  because they drop lines that I staged and the `git add -N` entry of a new file
+  because they drop lines that I staged
 * **DO** use this fallback when the second patch is wrong or fails, or the hunk needs a
-  finer split: write the version of the file that this commit needs to `$TMPDIR/<name>.new`,
+  finer split: write the version of the file that this commit needs to `$work/<name>.new`,
   in the form that the index holds, which is LF line ends after the clean filter, because
   `--no-filters` stores the bytes as they are; then `git update-index --add --cacheinfo
-  <mode>,"$(git hash-object -w --no-filters -- "$TMPDIR/<name>.new")",<path>` with the mode
+  <mode>,"$(git hash-object -w --no-filters -- "$work/<name>.new")",<path>` with the mode
   from `git ls-files -s -- <file>`, or 100644 or 100755 for a file that is not tracked;
   read `git diff --cached -- <file>` and `git diff --cached --summary`, so that a wrong
   mode shows; take the new text from the file, and change only the lines of this commit
@@ -307,8 +326,9 @@ git -c core.quotepath=off show --stat HEAD
   and without a trailing slash for a link
 * **DO** read `git diff --cached` before each commit; it is the commit
 * **DO** stop and tell me when `git diff --cached --check` prints a line for a line that you
-  added; for a file with CRLF line ends run `git -c core.whitespace=cr-at-eol diff --cached
-  --check` instead, which ignores only the carriage return; tell me when `git ls-files --eol`
+  added; for a file with CRLF line ends run only `git -c core.whitespace=cr-at-eol diff
+  --cached --check`, which ignores only the carriage return, because the plain command
+  prints every CRLF line; tell me when `git ls-files --eol`
   shows `i/mixed` for a staged file and did not before the stage, and the same for a file
   with mixed line ends; never fix the file; ignore the warning "LF will be
   replaced"
@@ -358,6 +378,8 @@ GIT_TERMINAL_PROMPT=0 git push -u origin <branch>
   blob larger than 50 MB that goes out; use 104857600 for the 100 MB limit
 * **DO** stop and ask me when git rejects the push, or a pre-push hook fails; the remote
   holds commits that the branch does not
+* **DO** read `git log -p --stat origin/<base>..<branch>` for a branch that a worktree
+  made, because HEAD is not on it
 * **DO** push a branch before a pull request uses it as its base
 * **DO NOT** force a push, with `--force`, `--force-with-lease`, or a `+` refspec; **DO NOT**
   push with `--delete`, `--mirror`, `--all`, `--tags`, or a `:branch` refspec; **DO NOT**
@@ -377,6 +399,11 @@ PR_BODY_END
 * **DO** give me the link and stop when the state is `OPEN`; the push updated that pull
   request, and its title and body stay as they are; tell me when they no longer fit
 * **DO** ask me when the state is `MERGED` or `CLOSED`, unless I already answered for it
+* **DO** ask me once when the pull request that this one stacks on is `MERGED` or `CLOSED`:
+  to retarget this one to the default branch with `gh pr edit --base`, which I allow with a
+  yes, or to leave it; after a squash merge the branch still holds the old commits, so
+  offer a new branch from `origin/<default branch>` too
+* **DO** check a new pull request with `gh pr view`, not `gh pr list`, which can lag
 * **DO** use the default branch as the base, or the branch of the pull request that this one
   stacks on
 * **DO** write the title by the commit message rules, under 44 characters, with no
@@ -395,6 +422,8 @@ PR_BODY_END
 * **DO** choose the template whose name fits the topic when there are more than one, and
   ask me only when two fit
 * **DO** write a body without a template as a few sentences on what changes and why
+* **DO** end the body at its last line of text, with no blank line, because the here-document
+  adds a line end
 * **DO** use `PR_BODY_END_2` in both places when a line of the body is exactly
   `PR_BODY_END`, and open the pull request ready for review, not as a draft, unless I ask
 * **DO** stop and tell me when `gh pr create` says that there are no commits between the
@@ -418,6 +447,11 @@ GIT_INDEX_FILE=<index file> git diff --cached --binary <base> | git -C <folder> 
 git -C <folder> commit -m "<message>"
 ```
 
+* **DO** put `GIT_INDEX_FILE=<index file>` in front of every `git add`, `git apply --cached`,
+  `git diff`, `git ls-files`, and `git update-index` of the commit section, and read the
+  result with `git diff --cached <base>`, with the `<base>` of `git read-tree`; a plain
+  `git diff --cached` compares with HEAD of the main clone, and shows the work of others as
+  yours
 * **DO** use `origin/<default branch>` as `<base>`, or the tip of the branch that this one
   stacks on; for the next commit of a topic, read the tree of the tip of its own branch
 * **DO** make a case rename its own commit in the worktree, with `git -C <folder> mv` in the
@@ -437,7 +471,7 @@ git -C <folder> commit -m "<message>"
   `git diff HEAD -- <file>`, for a file that the left-out commits also change; make the
   diff under the same `GIT_INDEX_FILE` first, because its line numbers differ from those in
   the main clone, and pick each line by its content; `git add -- <file>` takes all their
-  lines; use `git add -N` on the same index file for a file that is not tracked
+  lines
 * **DO** put `GIT_INDEX_FILE` in front of one command, and **DO NOT** export it; `git apply
   --index` would then read it as the index of the worktree and fail, and `git commit` and
   `git add` would use it without an error; when you exported it, run `unset GIT_INDEX_FILE`,
@@ -486,6 +520,9 @@ gh pr view <branch> --repo <nameWithOwner> --json url,commits -q '.url, (.commit
   cmp <folder>/<file> <file>
   ```
 
+  `cmp` can print a difference when the base moved and you left out a hunk that reverts it;
+  read `diff <folder>/<file> <file>`, and expect only those lines.
+
   When the merge conflicts, run `git -C <folder> merge --abort` before you stop, because a
   worktree in a merge cannot be removed without `--force`; ignore the error "There is no
   merge to abort"
@@ -516,10 +553,11 @@ request that I asked for worked:
   and a branch with `git rev-list origin/<branch>..<branch>`, which prints nothing; when
   `origin/<branch>` does not exist and the command fails, use `git rev-list
   origin/<default branch>..<branch>`; `git branch -d` only warns about a pushed branch that
-  is not merged, so this check is the guard
+  is not merged, so this check is the guard; ignore that warning for a pushed branch
 * **DO** remove the worktree first, with `git worktree remove <folder>`, then the branch with
-  `git branch -d <branch>`, then each temporary index file and the untracked list with
-  `rm -f`, and a temporary folder that you made with `rmdir <folder>` when it is empty
+  `git branch -d <branch>`, then each temporary index file and each file in `$work` with
+  `rm -f`, and `$work` and each other temporary folder that you made with `rmdir <folder>`
+  when it is empty
 * **DO** give me the commands for later when I say no, and remove nothing
 * **DO NOT** remove the worktree that the shell is in, **DO NOT** use `--force` or `-D`, and
   **DO NOT** remove a remote branch or an item that this session did not make

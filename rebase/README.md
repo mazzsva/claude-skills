@@ -16,8 +16,8 @@ and each line that the branch had. When a resolution is not clear, it stops and 
 * **It finds the commit that git dropped.** A resolution can empty a commit. Git then drops
   the commit and reports success. A rebase rewrites each hash, so the skill compares the
   subjects of the commits with those of a backup branch.
-* **It finds the marker that git committed.** Git commits a `<<<<<<<` line that stays in a
-  file, and reports success. The skill searches the result for each marker.
+* **It finds the marker that git committed.** Git commits a leftover `<<<<<<<` line and
+  reports success. The skill searches the result for it.
 * **It accounts for each removed line.** In the diff against the mainline, one of your commits
   must remove the line on purpose. In the diff against the backup, the mainline must be the
   cause. Any other removed line is lost work.
@@ -27,7 +27,7 @@ and each line that the branch had. When a resolution is not clear, it stops and 
   it reads the tip from `rebase-merge/orig-head`, because `ORIG_HEAD` can point at another
   commit after a reset.
 * **It does not abort to ask.** `git rebase --abort` loses each resolution, so the skill
-  leaves the rebase in progress while it waits for your answer.
+  leaves the rebase in progress while it waits.
 
 ## Safety
 

@@ -32,7 +32,7 @@ that a resolution quietly emptied, dropped and never mentioned. A conflict
 marker left in a file, committed just as quietly. A line of work gone from one
 side or the other, sitting in a diff nobody reads.
 
-It never pushes, and it never deletes the backup.
+It pushes only when you ask, with `--force-with-lease`, and it never deletes the backup.
 
 ## Requirements
 

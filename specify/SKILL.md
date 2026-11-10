@@ -1,6 +1,6 @@
 ---
 name: specify
-description: Finds the decisions that a feature or a change leaves open, interviews me about them, and writes a spec with requirements that can be checked. Use when asked to specify, scope, or think through work before it is built, or when a request for large work leaves its main decisions open. Not for a change that one prompt describes in full.
+description: Finds the decisions that a feature or a change leaves open, interviews the user about them, and writes a spec with requirements that can be checked. Use when asked to specify, scope, or think through work before it is built, or when a request for large work leaves its main decisions open. Not for a change that one prompt describes in full.
 ---
 
 # Specify

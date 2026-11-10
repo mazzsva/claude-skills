@@ -4,8 +4,6 @@ Versioned [Claude Code](https://claude.com/claude-code) skills, symlinked into `
 
 ## Developer tools
 
-Use them in this order. `rebase` is only for a pull request that conflicts.
-
 <table>
   <tr><td><a href="specify">specify</a></td><td>Finds the open decisions of a feature and writes a spec.</td></tr>
   <tr><td><a href="prove">prove</a></td><td>Checks a finished change against its spec in a fresh context.</td></tr>

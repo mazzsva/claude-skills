@@ -189,3 +189,5 @@ to the working tree you started in, also a linked worktree.
 * **DO** tell me when local `main` is behind `origin/<default branch>`, and that `git pull
   --ff-only` fixes it.
 * **DO** report each pull request link, its branch, and one line for each commit.
+
+Copyright © 2026 Lorenzo Mazzarotto

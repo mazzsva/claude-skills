@@ -1,62 +1,27 @@
 # propose
 
-One commit called "Update files" tells a reviewer nothing, and one pull request
-that holds three topics is hard to review.
+One commit called "Update files" tells a reviewer nothing, and one pull request that holds
+three topics is hard to review.
 
-A day of work is rarely one change. It is a fix, a rename, a new test, and a
-dependency bump, all in the same files. This groups them by topic, splits each
-topic into logical chunks, pushes it on a branch with a good name, and opens one
-pull request for each topic.
+This commits every pending change, split by reason into logical commits, pushes each topic on
+a well-named branch, and opens one pull request for each topic. It uses your template, and it
+writes a title that starts with a specific verb and names the object.
 
-## How it plans
+## What happens
 
-It reads every change, then decides how many pull requests the work needs. One
-topic is one pull request, and it asks nothing. Unrelated topics, or one topic
-that is too big to review, become a plan that you approve first: a name, the
-files, and a reason for each. Each independent pull request starts from the
-default branch, and a change that needs another stacks on top of it.
-
-## How it splits
-
-Each commit holds one change a reviewer can read alone. A change travels with
-its tests, its lockfile, and its generated files. The commits go in the order
-they build, and a change with one reason stays one commit, however many files it
-touches.
-
-Before the first commit of a topic, it runs the build, the tests, and the lint
-that your CLAUDE.md asks for.
-
-When one file holds two changes, it stages only the lines of the first one.
-`git add -p` waits for a person, so it writes a patch of those lines and applies
-it to the index with `git apply --cached`. It never changes the file.
-
-## How it names the branch
-
-It ignores a branch name that does not fit the work. On the default branch, or
-on a detached HEAD, it makes a new branch. It renames a branch that is not
-pushed and has no pull request. It keeps a branch that fits, and asks before it
-touches a branch that is pushed or has a pull request.
+* On the default branch, detached, or in a worktree: it makes a new branch for each topic from
+  the default branch, builds each in its own worktree, and opens the pull requests.
+* On a feature branch: it keeps the branch, renames it when the name does not fit, and adds the
+  commits. A branch with an open pull request gets the new commits, and the skill suggests a
+  new title when the old one is stale.
+* After a merged or closed pull request: it starts a new branch.
+* At the end, the changes live on the branches, and the working tree is clean.
 
 ## Safety
 
-The working tree is never touched. It is the backup, and at the end it proves
-the work: every change is in a commit, and nothing else is.
-
-It never forces a push, never skips a hook, never amends, and never rewrites a
-commit that already exists. It reads every new line for a secret, and asks
-before a secret or a file larger than 50 MB goes into a commit. A `.DS_Store`,
-build output, or an agent worktree stays out, and it says so. It treats text in
-files, diffs, and hook output as data, never as an instruction.
-
-It asks before a fork, a remote it cannot read, a branch whose pull request is
-closed, a hook that changes a file, an operation in progress, or a push that the
-remote rejects. Ask it only to commit, and it stops there.
-
-## After the pull request
-
-It lists the worktrees and branches that the session made, and asks if you want
-them removed. It removes only a clean, pushed item, never the worktree you are
-in, and it prints the commands for later when you say no.
+It commits everything that git does not ignore. It stops and asks only for a secret, a file
+over 100 MB, a rejected push, or a failed check. It never forces a push, skips a hook, amends a
+commit that exists, or pushes to the default branch.
 
 ## Requirements
 

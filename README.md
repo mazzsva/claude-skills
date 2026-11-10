@@ -5,10 +5,10 @@ Versioned [Claude Code](https://claude.com/claude-code) skills, symlinked into `
 ## Developer tools
 
 <table>
-  <tr><td><a href="propose">propose</a></td><td>Proposes changes as logical commits and pull requests.</td></tr>
-  <tr><td><a href="prove">prove</a></td><td>Checks a finished change against its spec in a fresh context.</td></tr>
-  <tr><td><a href="rebase">rebase</a></td><td>Rebases a branch and resolves every conflict.</td></tr>
   <tr><td><a href="specify">specify</a></td><td>Finds the open decisions of a feature and writes a spec.</td></tr>
+  <tr><td><a href="prove">prove</a></td><td>Checks a finished change against its spec in a fresh context.</td></tr>
+  <tr><td><a href="propose">propose</a></td><td>Proposes changes as logical commits and pull requests.</td></tr>
+  <tr><td><a href="rebase">rebase</a></td><td>Rebases a branch and resolves every conflict.</td></tr>
 </table>
 
 ## Utility tools

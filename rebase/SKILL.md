@@ -65,6 +65,18 @@ git diff <backup> HEAD
   mainline, and the second drops mine, unless the mainline rewrote that line
 * **DO NOT** push, and **DO NOT** delete the backup branch, until I ask
 
+## How to push
+
+Push only when I ask, and only after the verification:
+
+```bash
+git push --force-with-lease origin <branch>
+```
+
+* **DO** use `--force-with-lease`, and never `--force`; a rebase rewrites each commit, so a
+  plain push is rejected, and the lease refuses when the branch on `origin` moved after the
+  fetch
+
 ## Reference
 
 A rebase replays my commits onto the mainline, so the sides are the opposite of a merge:

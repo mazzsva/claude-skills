@@ -17,7 +17,8 @@ build. It reports each requirement as pass or fail, with the evidence.
   do not show that a screen works.
 * **The reviewer has no history.** A new subagent gets the spec, the evidence, and the diff
   only. It never reads the conversation or the reasoning of the builder, so it cannot repeat
-  the assumptions of the builder.
+  the assumptions of the builder. When the skill cannot start a subagent, the report says
+  that the review was not independent.
 * **The reviewer looks for stubs.** A fixed return value, an empty handler, or a branch that
   the spec needs and the code does not have.
 * **A pass needs proof.** Each `PASS` names an output line, or a file and a line. An edge case
@@ -32,8 +33,7 @@ build. It reports each requirement as pass or fail, with the evidence.
 
 ## Safety
 
-The reviewer reports and does not edit. The skill does not commit. When it cannot start a
-subagent, it says in the report that the review was not independent.
+The reviewer reports and does not edit, and the skill does not commit.
 
 ## Requirements
 

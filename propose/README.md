@@ -29,6 +29,8 @@ one topic for each pull request, in logical commits, on a well-named branch.
 * **It writes for a reviewer who has no other source.** A title starts with a specific verb
   and names the object. The body says why the change is needed, and it uses your template
   exactly.
+* **It stops when the decision is yours.** A secret or a file over 100 MB in a commit, a
+  failed check, a rejected push, and a plan with more than one topic all wait for your answer.
 * **It is short on purpose.** It grew to 751 lines in more than 60 commits of tests, and I
   then rewrote it in fewer than 200. Anthropic's skill guide gives the reason:
   "[the context window is a public good](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)".
@@ -36,10 +38,6 @@ one topic for each pull request, in logical commits, on a well-named branch.
 ## Safety
 
 It never forces a push, skips a hook, pushes to the default branch, or merges a pull request.
-It changes one commit only: a vague message at the tip of a branch that is not pushed, after
-you agree. It stops and asks before a secret or a file over 100 MB goes into a commit, when a
-check fails, and when a push is rejected. With more than one topic, it shows you the plan
-first.
 
 ## Requirements
 

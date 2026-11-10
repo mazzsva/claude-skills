@@ -30,8 +30,7 @@ for its topic. It only moves items, so no file is lost or changed.
 
 ## Safety
 
-It has no step that deletes, renames, or replaces an item in Downloads. It does not open,
-mount, run, or install an app, a disk image, a package, or a script.
+It never deletes, renames, or replaces an item, and it never runs an app or a script.
 
 ## Requirements
 

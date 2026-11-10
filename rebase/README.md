@@ -1,41 +1,41 @@
 # rebase
 
-The rebase is not the hard part. The conflicts are.
+The rebase is not the hard part. The conflicts are, and git reports three kinds of lost work
+as success, with an exit status of 0.
 
-Most of the time a conflict gets settled by a blanket rule that takes one side
-and hopes. This one reads every conflict, and decides. When the decision is not
-clear, it stops and asks. It also finishes a rebase that is already in progress.
+This skill reads each conflict and decides. It then proves that the result holds each commit
+and each line that the branch had. When a resolution is not clear, it stops and asks.
 
-## Where rebases go wrong
+## How it works
 
-In a rebase, `--ours` is the mainline and `--theirs` is the commit being
-replayed. That is the opposite of a merge, and it is where most resolutions go
-wrong.
-
-A binary file carries no conflict marker. Git leaves the mainline copy in the
-tree, and `git add` throws the other one away without a word. So the side gets
-chosen on purpose, with `git checkout --theirs`.
-
-A branch that sits on another branch needs `git rebase --onto`. A plain rebase
-replays commits the mainline already has, a second time.
-
-Uncommitted changes belong to whoever wrote them, and they get placed by hand.
-Unless a rebase is already running, and then they are the conflict itself.
+* **It knows that the sides are the opposite of a merge.** In a rebase, `--ours` is the
+  mainline, and `--theirs` is the commit of yours that git replays. Most wrong resolutions
+  start here.
+* **It picks the side of a binary file on purpose.** A binary file holds no conflict marker.
+  Git leaves the mainline copy in the tree, and `git add` keeps it without a word.
+* **It finds the commit that git dropped.** A resolution can empty a commit. Git then drops
+  the commit and reports success. A rebase rewrites each hash, so the skill compares the
+  subjects of the commits with those of a backup branch.
+* **It finds the marker that git committed.** Git commits a `<<<<<<<` line that stays in a
+  file, and reports success. The skill searches the result for each marker.
+* **It accounts for each removed line.** In the diff against the mainline, one of your commits
+  must remove the line on purpose. In the diff against the backup, the mainline must be the
+  cause. Any other removed line is lost work.
+* **It runs the build and the tests.** A commit that replays with no conflict can still use a
+  name that the mainline changed.
+* **It takes the backup from the correct commit.** For a rebase that is already in progress,
+  it reads the tip from `rebase-merge/orig-head`, because `ORIG_HEAD` can point at another
+  commit after a reset.
+* **It does not abort to ask.** `git rebase --abort` loses each resolution, so the skill
+  leaves the rebase in progress while it waits for your answer.
 
 ## Safety
 
-It branches a backup before it starts, and measures the result against that
-backup at the end.
-
-Then it goes looking for the three failures git reports as success. A commit
-that a resolution quietly emptied, dropped and never mentioned. A conflict
-marker left in a file, committed just as quietly. A line of work gone from one
-side or the other, sitting in a diff nobody reads.
-
-It pushes only when you ask, with `--force-with-lease`, and it never deletes the backup.
+It makes a backup branch before it starts, and keeps it until you ask. It pushes only when
+you ask, with `--force-with-lease`, so the push fails if the branch on `origin` moved.
 
 ## Requirements
 
-Git, and a remote named `origin`. Nothing else.
+Git, and a remote named `origin`.
 
 Copyright © 2026 Lorenzo Mazzarotto

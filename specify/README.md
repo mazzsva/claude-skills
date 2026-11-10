@@ -1,35 +1,41 @@
 # specify
 
-A short request leaves the important decisions open. The model then makes them with defaults
-that can be wrong for your app, and you find out after the build.
+A vague request gets industry defaults. A request that is too specific stops the model from a
+better path. Anthropic's field guide to Claude Fable 5 names the real limit: the quality of
+the work is
+"[bottlenecked by my ability to clarify its unknowns](https://claude.com/resources/articles/a-field-guide-to-claude-fable-finding-your-unknowns)".
 
-This finds those decisions before any code exists. It reads your code, shows you what is not
-decided, asks you one question at a time, and writes a spec that says what done means.
+This skill finds those unknowns before any code exists. It interviews you about the decisions
+that only you can make, and writes a spec that a new session can build from and that the
+[prove](../prove) skill can check.
 
-## What happens
+## How it works
 
-* It reads the request against the code, and finds a file that already does a similar thing.
-* It lists the decisions that the work forces, with the ones you did not know about.
-* It asks one question at a time, with choices, and the questions that change the most first.
-* It writes `specs/<topic>.md`: numbered requirements, edge cases, what is out of scope, and
-  exact checks.
-* It stops, and gives you a prompt to start the build in a new session.
+* **It reads the code before it asks.** A question that the repository answers costs you a
+  turn. It also finds a file that already does a similar thing, because source code shows a
+  pattern better than words do.
+* **It shows you the decisions that you did not know about.** A migration of saved data, a
+  second platform, a screen with no data: the code forces them, and the request did not
+  mention them.
+* **It asks only what changes the result.** One question at a time, the largest decision
+  first, with choices and a recommendation. Each other decision gets a default, and the spec
+  marks it as assumed. When words are not enough, it offers a throwaway prototype.
+* **It specifies the result, not the path.** Each requirement is a behaviour that a person or
+  a test can observe. A spec that fixes the implementation stops a better one that the model
+  finds during the build.
+* **It defines done.** Each requirement has a number, each edge case needs a test, and each
+  check is an exact command with the output that means pass.
+* **It hands the build to a new session.** In the words of the
+  [Claude Code best practices](https://code.claude.com/docs/en/best-practices), "the build
+  begins with a clean context and a written definition of done". When the code forces the
+  build to leave the spec, the build writes the deviation in the spec, and `prove` asks you
+  about it.
 
 ## Safety
 
-It writes one file, and each piece of work gets its own. It keeps `specs/` out of git for
-that clone, so a spec is never committed or pushed. It does not start the build unless you
-ask.
-
-## Sources
-
-The method comes from these Anthropic publications:
-
-* [Best practices for Claude Code](https://code.claude.com/docs/en/best-practices)
-* [A field guide to Claude Fable 5: Finding your unknowns](https://claude.com/resources/articles/a-field-guide-to-claude-fable-finding-your-unknowns)
-* [The AI-native SDLC playbook](https://claude.com/resources/articles/the-ai-native-sdlc-playbook)
-* [Harness design for long-running application development](https://www.anthropic.com/research/harness-design-long-running-apps)
-* [Best practices for using Claude Opus 4.7 with Claude Code](https://claude.com/resources/articles/best-practices-for-using-claude-opus-4-7-with-claude-code)
+A spec stays local. The skill adds `specs/` to the ignore list of that clone, in a file that
+git does not track, so no skill commits or pushes it. A prototype goes outside the
+repository, or the skill deletes it after you look. The build starts only when you ask.
 
 ## Requirements
 

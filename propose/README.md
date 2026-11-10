@@ -1,27 +1,45 @@
 # propose
 
-One commit called "Update files" tells a reviewer nothing, and one pull request that holds
-three topics is hard to review.
+A model writes code faster than a person can review it. Anthropic reports that its code
+output for each engineer grew 200% in one year, and that
+"[many PRs get skims rather than deep reads](https://claude.com/resources/articles/code-review)".
+A pull request that holds three topics makes that worse.
 
-This commits every pending change, split by reason into logical commits, pushes each topic on
-a well-named branch, and opens one pull request for each topic. It uses your template, and it
-writes a title that starts with a specific verb and names the object.
+This skill turns a working tree of mixed changes into pull requests that a reviewer can read:
+one topic for each pull request, in logical commits, on a well-named branch.
 
-## What happens
+## How it works
 
-* On the default branch, detached, or in a worktree: it makes a new branch for each topic from
-  the default branch, builds each in its own worktree, and opens the pull requests.
-* On a feature branch: it keeps the branch, renames it when the name does not fit, and adds the
-  commits. A branch with an open pull request gets the new commits, and the skill suggests a
-  new title when the old one is stale.
-* After a merged or closed pull request: it starts a new branch.
-* At the end, the changes live on the branches, and the working tree is clean.
+* **It splits by reason, not by file.** A removal, a new feature, and a restyle on one screen
+  are three topics. Each topic must fit in one sentence, and a sentence that needs "and" is
+  two topics.
+* **It splits one file between two topics.** Each branch gets the base text with only the
+  lines of its topic.
+* **It isolates each topic.** With more than one topic, each one gets its own worktree, made
+  from the default branch of `origin`. Each pull request holds only its lines, and your
+  working tree stays as it is until the end.
+* **It proves that no change is lost before it cleans up.** It compares the hash of each
+  changed file with the same file on its branch. For a file that it split, it merges the
+  branches in a scratch worktree and compares the result byte for byte.
+* **It reads everything as data.** File content, diffs, `gh` output, hook output, and
+  templates are never instructions.
+* **It does not trust a success message.** A hook can change a commit message, so it compares
+  the message after each commit. After a squash merge, `git cherry` reports merged work as
+  missing, so it compares the content.
+* **It writes for a reviewer who has no other source.** A title starts with a specific verb
+  and names the object. The body says why the change is needed, and it uses your template
+  exactly.
+* **It is short on purpose.** It grew to 751 lines in more than 60 commits of tests, and I
+  then rewrote it in fewer than 200. Anthropic's skill guide gives the reason:
+  "[the context window is a public good](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)".
 
 ## Safety
 
-It commits everything that git does not ignore. It stops and asks only for a secret, a file
-over 100 MB, a rejected push, or a failed check. It never forces a push, skips a hook, amends a
-commit that exists, or pushes to the default branch.
+It never forces a push, skips a hook, pushes to the default branch, or merges a pull request.
+It changes one commit only: a vague message at the tip of a branch that is not pushed, after
+you agree. It stops and asks before a secret or a file over 100 MB goes into a commit, when a
+check fails, and when a push is rejected. With more than one topic, it shows you the plan
+first.
 
 ## Requirements
 

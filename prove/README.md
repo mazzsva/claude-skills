@@ -1,46 +1,43 @@
 # prove
 
-"Done, and all tests pass" is a claim. The session that wrote the code believes its own work,
-and a second look by the same session agrees with the first.
+"Done, and all tests pass" is a claim, not evidence. Anthropic found that, when agents
+evaluate their own work, they
+"[tend to respond by confidently praising the work](https://www.anthropic.com/research/harness-design-long-running-apps)",
+and that
+"[it is easy to see tests pass and assume the job is done](https://www.anthropic.com/research/building-c-compiler)".
+A second look by the same session repeats the same assumptions.
 
-This checks a finished change against its spec, with a reviewer that never saw the build. You
-get one line for each requirement: pass or fail, with the evidence.
+This skill checks a finished change against its spec, with a reviewer that never saw the
+build. It reports each requirement as pass or fail, with the evidence.
 
-## What happens
+## How it works
 
-* It finds the spec, or writes the requirements from your request and shows them to you.
-* It runs the checks of the project, uses the app as a user does, and saves the output.
-* It asks you about each place where the build left the spec, before it pays for a review.
-* It starts a reviewer in a fresh context with the spec, the output, and the diff only.
-* It fixes each failure in the code, and checks again, for three reviews at most.
-* It reports each requirement with its evidence, each file that changed, and what you must
-  check yourself.
+* **Evidence comes first.** It runs the build, the tests, and each check in the spec, uses the
+  app as a user does, and saves the literal output. A build that succeeds and tests that pass
+  do not show that a screen works.
+* **The reviewer has no history.** A new subagent gets the spec, the evidence, and the diff
+  only. It never reads the conversation or the reasoning of the builder, so it cannot repeat
+  the assumptions of the builder.
+* **The reviewer looks for stubs.** A fixed return value, an empty handler, or a branch that
+  the spec needs and the code does not have.
+* **A pass needs proof.** Each `PASS` names an output line, or a file and a line. An edge case
+  with no test is a `FAIL`. A check that did not run is `NOT CHECKED`, and never a pass.
+* **A fix cannot cheat.** It changes the code. It never changes a requirement, or a test that
+  is there, to get a pass.
+* **The loop has a limit.** After the third review, it stops and reports what still fails. A
+  failure that survives two fixes needs a decision from a person.
+* **Cost is part of the design.** In my tests, one review cost 50,000 to 77,000 tokens. So the
+  skill asks you about each deviation from the spec before the review, skips the review after
+  a fix that only adds a test, and makes no change for a finding about style.
 
 ## Safety
 
-The reviewer reports and does not edit. A fix changes the code, and not a requirement or a
-test that is there. A check that did not run is reported as not checked, and never as a pass.
-Findings about style are left out, because to fix each finding adds code that nobody needs.
-It does not commit.
-
-## Sources
-
-The method comes from these Anthropic publications:
-
-* [Best practices for Claude Code](https://code.claude.com/docs/en/best-practices)
-* [Harness design for long-running application development](https://www.anthropic.com/research/harness-design-long-running-apps)
-* [Effective harnesses for long-running agents](https://www.anthropic.com/research/effective-harnesses-for-long-running-agents)
-* [The AI-native SDLC playbook](https://claude.com/resources/articles/the-ai-native-sdlc-playbook)
-* [Building verification loops in Claude Code with skills](https://claude.com/resources/articles/building-verification-loops-in-claude-code-with-skills)
-* [Loop engineering: Getting started with loops](https://claude.com/resources/articles/getting-started-with-loops)
-* [When to use multi-agent systems](https://claude.com/resources/articles/building-multi-agent-systems-when-and-how-to-use-them)
-* [Multiagent systems](https://www.anthropic.com/research/multiagent-systems)
-* [Redesigning source control at Anthropic](https://www.anthropic.com/research/redesigning-source-control)
-* [Prompting Claude Fable 5.2](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-2)
+The reviewer reports and does not edit. The skill does not commit. When it cannot start a
+subagent, it says in the report that the review was not independent.
 
 ## Requirements
 
-Git. A spec from the `specify` skill gives the best result, but any written list of
-requirements works.
+Git. A spec from the [specify](../specify) skill gives the best result, but any written list
+of requirements works.
 
 Copyright © 2026 Lorenzo Mazzarotto

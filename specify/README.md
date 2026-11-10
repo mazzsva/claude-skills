@@ -23,13 +23,12 @@ that only you can make, and writes a spec that a new session can build from and 
 * **It specifies the result, not the path.** Each requirement is a behaviour that a person or
   a test can observe. A spec that fixes the implementation stops a better one that the model
   finds during the build.
-* **It defines done.** Each requirement has a number, each edge case needs a test, and each
-  check is an exact command with the output that means pass.
-* **It hands the build to a new session.** In the words of the
-  [Claude Code best practices](https://code.claude.com/docs/en/best-practices), "the build
-  begins with a clean context and a written definition of done". When the code forces the
-  build to leave the spec, the build writes the deviation in the spec, and `prove` asks you
-  about it.
+* **It defines done.** Requirements are numbered, edge cases need tests, and each check is an
+  exact command with expected output.
+* **It hands the build to a new session.** As the
+  [Claude Code best practices](https://code.claude.com/docs/en/best-practices) say, "the
+  build begins with a clean context and a written definition of done". When the code forces
+  the build to leave the spec, the build logs the deviation there, and `prove` asks you.
 
 ## Safety
 

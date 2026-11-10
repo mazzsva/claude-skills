@@ -7,8 +7,8 @@ and that
 "[it is easy to see tests pass and assume the job is done](https://www.anthropic.com/research/building-c-compiler)".
 A second look by the same session repeats the same assumptions.
 
-This skill checks a finished change against its spec, with a reviewer that never saw the
-build. It reports each requirement as pass or fail, with the evidence.
+A reviewer that never saw the build checks a finished change against its spec, and each
+requirement gets a pass or a fail, with evidence.
 
 ## How it works
 
@@ -25,15 +25,15 @@ build. It reports each requirement as pass or fail, with the evidence.
 * **A fix cannot cheat.** It changes the code. It never changes a requirement, or a test that
   is there, to get a pass.
 * **The loop has a limit.** After the third review, it stops and reports what still fails. A
-  failure that survives two fixes needs a decision from a person.
+  failure that survives two fixes needs your decision.
 * **Cost is part of the design.** In my tests, one review cost 50,000 to 77,000 tokens. So the
   skill asks you about each deviation from the spec before the review, skips the review after
   a fix that only adds a test, and makes no change for a finding about style.
 
 ## Safety
 
-The reviewer reports and does not edit. The skill does not commit. When it cannot start a
-subagent, it says in the report that the review was not independent.
+The reviewer reports and does not edit. The skill never commits. Without a subagent, the
+report says the review was not independent.
 
 ## Requirements
 

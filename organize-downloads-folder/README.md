@@ -1,6 +1,6 @@
 # organize-downloads-folder
 
-A file name says little. `scan0042.pdf` can be a contract or a manual, so a sort by name or by
+A file name says little. `Document.pdf` can be a contract or a manual, so a sort by name or by
 file type puts it in the wrong place.
 
 This skill reads the content of each item in the Downloads folder, and moves it into a folder

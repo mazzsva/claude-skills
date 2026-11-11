@@ -15,9 +15,9 @@ requirement gets a pass or a fail, with evidence.
 * **Evidence comes first.** It runs the build, the tests, and each check in the spec, uses the
   app as a user does, and saves the literal output. A build that succeeds and tests that pass
   do not show that a screen works.
-* **The reviewer has no history.** A new subagent gets the spec, the evidence, and the diff
-  only. It never reads the conversation or the reasoning of the builder, so it cannot repeat
-  the assumptions of the builder.
+* **The reviewer starts with a fresh context.** A new subagent, in its own context window,
+  gets the spec, the evidence, and the diff only. It never reads the main conversation or the
+  reasoning of the builder, so it cannot repeat the assumptions of the builder.
 * **The reviewer looks for stubs.** A fixed return value, an empty handler, or a branch that
   the spec needs and the code does not have.
 * **A pass needs proof.** Each `PASS` names an output line, or a file and a line. An edge case

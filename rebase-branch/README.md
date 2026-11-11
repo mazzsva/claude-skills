@@ -1,4 +1,4 @@
-# rebase
+# rebase-branch
 
 The rebase is not the hard part. The conflicts are, and git reports three kinds of lost work
 as success, with an exit status of 0.

@@ -1,4 +1,4 @@
-# propose
+# open-pr
 
 A model writes code faster than a person can review it. Anthropic reports that its code
 output for each engineer grew 200% in one year, and that

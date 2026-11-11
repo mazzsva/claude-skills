@@ -1,4 +1,4 @@
-# prove
+# verify-spec
 
 "Done, and all tests pass" is a claim, not evidence. Anthropic found that, when agents
 evaluate their own work, they
@@ -37,7 +37,7 @@ report says the review was not independent.
 
 ## Requirements
 
-Git. A spec from the [specify](../specify) skill gives the best result, but any written list
-of requirements works.
+Git. A spec from the [write-spec](../write-spec) skill gives the best result, but any written
+list of requirements works.
 
 Copyright © 2026 Lorenzo Mazzarotto

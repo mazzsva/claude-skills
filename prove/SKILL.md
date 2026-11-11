@@ -74,10 +74,10 @@ Keep each real problem at its severity. Do not decide that it is acceptable.
   against a requirement, and show me what the evidence says about it; when I accept it, change
   the requirement in the spec to match, and when I reject it, change the code. A review costs
   much more than a question, and my answer decides what it checks
-* **DO** give the reviewer the spec, the evidence, and the diff only; a reviewer that reads my
-  conversation or your reasoning repeats your assumptions
+* **DO** give the reviewer the spec, the evidence, and the diff only; a reviewer that reads the
+  main conversation or your reasoning repeats your assumptions
 * **DO** check that each `PASS` from the reviewer names its evidence; agreement between two
-  sessions of the same model is not proof
+  instances of the same model is not proof
 * **DO** do the review yourself when you cannot start a subagent, and say in the report that
   the review was not independent
 

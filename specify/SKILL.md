@@ -7,8 +7,8 @@ description: Finds the decisions that a feature or a change leaves open, intervi
 
 ## Goal
 
-Write a spec: the decisions that only I can make, and a definition of done that a new session
-can build from and that the `prove` skill can check.
+Write a spec: the decisions that only I can make, and a definition of done that a fresh
+session can build from and that the `prove` skill can check.
 
 ## Quick start
 
@@ -29,10 +29,10 @@ git check-ignore -q specs/x || echo 'specs/' >> "$(git rev-parse --git-path info
 * **DO** ask me, in one question, what I know about this part of the code and what I decided
   already, when my request does not say; the next section depends on the answer
 
-## How to find what is not decided
+## How to find the unknowns
 
-Before the interview, show me the decisions that this work forces and that my request does not
-make, with the ones that I probably do not know about:
+Before the interview, show me the unknowns: the decisions that this work forces and that my
+request does not make, with the ones that I probably do not know about:
 
 ```text
 Decision | Why it matters | Recommendation
@@ -117,10 +117,10 @@ Each one needs a test.
   only when a different default changes the result
 * **DO** leave Deviations empty; the build writes there each place where it left the spec
 
-## How to hand over
+## How to hand off
 
 Show me the decisions, with the assumed ones marked. Correct the spec until I accept it, set
-its status to `accepted`, and give me this prompt for a new session:
+its status to `accepted`, and give me this prompt for a fresh session:
 
 ```text
 Build specs/<topic>.md. When the code forces you to leave the spec, pick the conservative
@@ -130,7 +130,7 @@ the prove skill.
 
 * **DO** ask me each question that is still open before you set the status; a spec with an
   open question is not a definition of done
-* **DO NOT** start the build in this session, unless I ask for it; a new session starts with a
-  clean context and the written definition of done, without the turns of the interview
+* **DO NOT** start the build in this session, unless I ask for it; a fresh session starts with
+  a clean context and the written definition of done, without the turns of the interview
 
 Copyright © 2026 Lorenzo Mazzarotto

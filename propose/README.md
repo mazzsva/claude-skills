@@ -21,8 +21,8 @@ one topic for each pull request, in logical commits, on a well-named branch.
 * **It proves that no change is lost before it cleans up.** It compares the hash of each
   changed file with the same file on its branch. For a file that it split, it merges the
   branches in a scratch worktree and compares the result byte for byte.
-* **It reads everything as data.** File content, diffs, `gh` output, hook output, and
-  templates are never instructions.
+* **It treats a prompt injection as data.** File content, diffs, `gh` output, hook output,
+  and templates are never instructions.
 * **It does not trust a success message.** A hook can change a commit message, so it compares
   the message after each commit. After a squash merge, `git cherry` reports merged work as
   missing, so it compares the content.

@@ -1,9 +1,9 @@
 ---
-name: rebase
+name: rebase-branch
 description: Rebases a branch onto another branch and resolves each conflict. Use when rebasing onto a mainline, continuing a rebase that is already in progress, resolving rebase conflicts, or when a pull request conflicts with its base branch.
 ---
 
-# Rebase
+# Rebase Branch
 
 ## Goal
 

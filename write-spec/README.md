@@ -1,4 +1,4 @@
-# specify
+# write-spec
 
 A vague request gets industry defaults. A request that is too specific stops the model from a
 better path. Anthropic's field guide to Claude Fable 5 names the real limit: the quality of
@@ -7,7 +7,7 @@ the work is
 
 This skill finds those unknowns before any code exists. It interviews you about the decisions
 that only you can make, and writes a spec that a fresh session can build from and that the
-[prove](../prove) skill can check.
+[verify-spec](../verify-spec) skill can check.
 
 ## How it works
 
@@ -27,7 +27,7 @@ that only you can make, and writes a spec that a fresh session can build from an
 * **It hands off the build to a fresh session.** As the
   [Claude Code best practices](https://code.claude.com/docs/en/best-practices) say, "the
   build begins with a clean context and a written definition of done". When the code forces
-  the build to leave the spec, the build logs the deviation there, and `prove` asks you.
+  the build to leave the spec, the build logs the deviation there, and `verify-spec` asks you.
 
 ## Safety
 

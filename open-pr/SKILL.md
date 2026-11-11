@@ -1,9 +1,9 @@
 ---
-name: propose
-description: Proposes the changes in the working tree on GitHub. Groups them by topic, splits each topic into logical commits, pushes each topic on a well-named branch, and opens one pull request for each topic. Use when asked to propose changes, commit, push, or open or create a pull request.
+name: open-pr
+description: Opens pull requests on GitHub for the changes in the working tree. Groups them by topic, splits each topic into logical commits, pushes each topic on a well-named branch, and opens one pull request for each topic. Use when asked to open or create a pull request, commit, push, or propose changes.
 ---
 
-# Propose
+# Open PR
 
 ## Goal
 
@@ -138,8 +138,8 @@ gh pr view <branch> --json url,mergeable,mergeStateStatus
 ```
 
 * **DO** read the log of commits that you did not write before you push them, for a secret.
-  Stop and ask me if the push is rejected. Never force it; the `rebase` skill has the push of
-  a branch that it rewrote.
+  Stop and ask me if the push is rejected. Never force it; the `rebase-branch` skill has the
+  push of a branch that it rewrote.
 * **DO** push a stacked branch before you open the pull request that uses it as its base, and
   open the base pull request first.
 * **DO** write the title by the commit rules: under 44 characters, no punctuation, a specific
@@ -163,7 +163,7 @@ gh pr view <branch> --json url,mergeable,mergeStateStatus
 * **DO** open the pull request ready for review, not a draft. Pick a heredoc terminator that no
   line of the body equals.
 * **DO** ask again after a few seconds when `mergeable` is `UNKNOWN`, and tell me when it is
-  `CONFLICTING`, and that the `rebase` skill resolves it.
+  `CONFLICTING`, and that the `rebase-branch` skill resolves it.
 
 ## 6. Leave nothing behind
 

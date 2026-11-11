@@ -1,14 +1,14 @@
 ---
-name: specify
-description: Finds the decisions that a feature or a change leaves open, interviews the user about them, and writes a spec with requirements that can be checked. Use when asked to specify, scope, or think through work before it is built, or when a request for large work leaves its main decisions open. Not for a change that one prompt describes in full.
+name: write-spec
+description: Finds the decisions that a feature or a change leaves open, interviews the user about them, and writes a spec with requirements that can be checked. Use when asked to write a spec, or to specify, scope, or think through work before it is built, or when a request for large work leaves its main decisions open. Not for a change that one prompt describes in full.
 ---
 
-# Specify
+# Write Spec
 
 ## Goal
 
 Write a spec: the decisions that only I can make, and a definition of done that a fresh
-session can build from and that the `prove` skill can check.
+session can build from and that the `verify-spec` skill can check.
 
 ## Quick start
 
@@ -21,7 +21,7 @@ git check-ignore -q specs/x || echo 'specs/' >> "$(git rev-parse --git-path info
 ```
 
 * **DO** run the third command; it adds `specs/` to the ignore list of this clone only, in a
-  file that git does not track, so that the `propose` skill never commits or pushes a spec
+  file that git does not track, so that the `open-pr` skill never commits or pushes a spec
 * **DO** read the code that the request touches before the first question; a question that the
   repository answers costs me a turn
 * **DO** find a file that already does a similar thing; it becomes the reference in the spec,
@@ -52,7 +52,7 @@ Ask in this order, because an early answer changes the later questions:
 1. What changes the data model, an interface between two parts, or what the user sees
 2. What is out of scope, and how complete the result must be
 3. The edge cases, and what must occur in each one
-4. How to prove that the work is done
+4. How to verify that the work is done
 ```
 
 * **DO** ask one question at a time, with two to four choices and your recommendation first
@@ -61,7 +61,7 @@ Ask in this order, because an early answer changes the later questions:
   write that default in the spec as assumed
 * **DO** offer a throwaway prototype with fake data, or three or four different directions,
   when I cannot describe the result but I would know it when I see it; put it outside the
-  repository, or delete it after I look, because the `propose` skill commits each file that
+  repository, or delete it after I look, because the `open-pr` skill commits each file that
   it finds
 * **DO NOT** ask me how to build it; I decide what the result is, and you decide the path
 
@@ -105,11 +105,11 @@ Each one needs a test.
 * **DO** write each requirement as a behaviour that a person or a test can observe, not as a
   step of the implementation; a spec that fixes the path stops a better path that you find
   during the build
-* **DO** number each requirement; the `prove` skill reports by number
+* **DO** number each requirement; the `verify-spec` skill reports by number
 * **DO** make each line under Check exact: a command with the output that means pass, or an
   action in the running app with what to see; leave the action out when the project has no app
-  to run, and give no number of tests, because the `prove` skill finds the test for each edge
-  case
+  to run, and give no number of tests, because the `verify-spec` skill finds the test for each
+  edge case
 * **DO** say how complete the result must be, such as the empty state and the error state; a
   request with no stated scope gets the smallest result that satisfies it
 * **DO** keep the spec in proportion to the work, and on one page when the work permits; write
@@ -125,7 +125,7 @@ its status to `accepted`, and give me this prompt for a fresh session:
 ```text
 Build specs/<topic>.md. When the code forces you to leave the spec, pick the conservative
 option, write it under Deviations in the spec, and keep going. When the build is done, use
-the prove skill.
+the verify-spec skill.
 ```
 
 * **DO** ask me each question that is still open before you set the status; a spec with an

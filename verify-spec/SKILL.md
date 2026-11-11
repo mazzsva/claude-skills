@@ -1,9 +1,9 @@
 ---
-name: prove
-description: Checks a finished change against its spec in a fresh context, and reports each requirement as pass or fail with the evidence. Use when asked to prove, check, or verify that a change does what was asked, or before work that was built from a spec is reported as done. Not for a small change, where the build and the tests are enough.
+name: verify-spec
+description: Verifies a finished change against its spec in a fresh context, and reports each requirement as pass or fail with the evidence. Use when asked to verify, check, or prove that a change does what was asked, or before work that was built from a spec is reported as done. Not for a small change, where the build and the tests are enough.
 ---
 
-# Prove
+# Verify Spec
 
 ## Goal
 
@@ -112,7 +112,7 @@ Keep each real problem at its severity. Do not decide that it is acceptable.
   changes out
 * **DO** end with what I must check myself, and with each finding of the reviewer that you
   did not fix and the reason
-* **DO NOT** commit; the `propose` skill does that when I ask
+* **DO NOT** commit; the `open-pr` skill does that when I ask
 
 ## Reference
 

@@ -32,7 +32,8 @@ and each line that the branch had. When a resolution is not clear, it stops and 
 ## Safety
 
 It makes a backup branch before it starts, and keeps it until you ask. It pushes only when
-you ask, with `--force-with-lease`, so the push fails if the branch on `origin` moved.
+you ask, with `--force-with-lease` and `--force-if-includes`, so the push fails when the
+branch on `origin` holds a commit that your branch never held.
 
 ## Requirements
 

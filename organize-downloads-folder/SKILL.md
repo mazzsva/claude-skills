@@ -32,7 +32,7 @@ Find the topic from the content, not the name:
 
 ```bash
 T="${TMPDIR:-/tmp/}organize-downloads-folder"; mkdir -p "$T"
-for f in *; do case "$f" in *.p8|*.p12|*.pem|*.key) continue;; esac; [ -f "$f" ] && { echo "== $f"; mdimport -t -d3 "./$f" 2>&1 | sed -n 's/.*kMDItemTextContent = //p' | head -c 300; echo; }; done
+for f in *; do [ -f "$f" ] || continue; echo "== $f"; case "$f" in *.p8|*.p12|*.pem|*.key|*.env|*.kdbx|*.ppk|id_*) echo PRIVATE; continue;; esac; t=$(mdimport -t -d3 "./$f" 2>&1 | sed -n 's/.*kMDItemTextContent = //p' | head -c 300); if printf '%s' "$f $t" | grep -qiE 'passw|secret|credential|api[_ -]?key|private[_ -]?key|[_-]token|token[=:"]|(recovery|backup) (code|key|phrase)|seed phrase'; then echo PRIVATE; else printf '%s\n' "$t"; fi; done
 find "./<folder>" -not -name '.*' | head -30
 sips -Z 900 -s format jpeg "./<image>" --out "$T/<n>.jpg"
 head -c 2000 "./<text file>"
@@ -46,8 +46,8 @@ mdls -raw -name kMDItemWhereFroms "./<item>"
 * **DO** read each image with the Read tool, through its small copy
 * **DO** read a file that the loop gives no text for with `head`, or with the Read tool
   through a copy that ends in the correct extension
-* **DO** read only the first line of a key or a credential file, such as `.p8`, `.pem`, or
-  `.key`, and **DO NOT** show its content to the user
+* **DO NOT** read a file that the loop marks `PRIVATE`, with any command; its name or its text
+  shows a key, a password, or a token, so find its topic from its name and its type only
 * **DO NOT** open, mount, run, or install an app, a disk image, a package, or a script
 * **DO** copy each name from the output of a command, or match it with a glob; macOS puts
   a narrow no-break space before `AM` and `PM`, so a typed space does not match

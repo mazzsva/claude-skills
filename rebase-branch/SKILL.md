@@ -75,12 +75,14 @@ git diff <backup> HEAD
 Push only when I ask, and only after the verification:
 
 ```bash
-git push --force-with-lease origin <branch>
+git push --force-with-lease --force-if-includes origin <branch>
 ```
 
-* **DO** use `--force-with-lease`, and never `--force`; a rebase rewrites each commit, so a
-  plain push is rejected, and the lease refuses when the branch on `origin` moved after the
-  fetch
+* **DO** use both flags, and never `--force`; a rebase rewrites each commit, so a plain push is
+  rejected. The lease refuses when the branch on `origin` moved after the fetch, and
+  `--force-if-includes` refuses when the fetch brought a commit that this branch never held
+* **DO** stop and tell me when git rejects the push; the branch on `origin` holds a commit of
+  another session, and a forced push removes it
 
 ## Reference
 

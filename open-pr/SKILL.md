@@ -106,8 +106,9 @@ did, ask me whether to branch from HEAD or from the new `origin/<default branch>
 * **DO** run the build, tests, and lint that CLAUDE.md asks for, and tell me what you ran. When
   one fails, stop and tell me the first error.
 * **DO** scan the added lines and the untracked files for a secret before the first commit.
-* **One topic:** `git switch -c <name> --no-track origin/<default branch>`, stage the files by
-  name, and commit. Your pending changes come along.
+* **One topic on a new branch:** `git switch -c <name> --no-track origin/<default branch>`,
+  stage the files by name, and commit. Your pending changes come along.
+* **One topic on a branch that step 3 keeps:** stage the files by name, and commit in place.
 * **More than one topic:** make a worktree for each topic, with `git worktree add -b <name>
   --no-track <folder in $TMPDIR> origin/<default branch>`; when step 3 keeps the current
   branch for one topic, commit that topic in place. Copy each file in with `cp -p`, after

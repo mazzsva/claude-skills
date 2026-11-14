@@ -21,8 +21,9 @@ only moves items, so no file is lost or changed.
   makes a subfolder that says how they differ.
 * **It reports duplicates, and deletes none.** It compares the MD5 of each file, and you
   decide which one stays.
-* **It keeps secrets closed.** It reads only the first line of a key or a credential file, and
-  never shows the content.
+* **It keeps secrets closed.** The command that gets the text marks each file whose name or
+  text shows a key, a password, or a token, and prints nothing from it. The skill sorts that
+  file by its name and its type.
 * **It handles two traps of macOS.** macOS puts a narrow no-break space before `AM` and `PM`
   in a file name, so a typed space does not match, and the skill copies each name from
   command output. `mkdir -p` hides a name that is already in use, so the skill avoids it.

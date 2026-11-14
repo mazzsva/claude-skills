@@ -76,8 +76,10 @@ Keep each real problem at its severity. Do not decide that it is acceptable.
   much more than a question, and my answer decides what it checks
 * **DO** give the reviewer the spec, the evidence, and the diff only; a reviewer that reads the
   main conversation or your reasoning repeats your assumptions
+* **DO** start the reviewer on a model that is not the model of this session, when one is
+  available; a model rates its own work too high, and a second model has other blind spots
 * **DO** check that each `PASS` from the reviewer names its evidence; agreement between two
-  instances of the same model is not proof
+  models is not proof
 * **DO** do the review yourself when you cannot start a subagent, and say in the report that
   the review was not independent
 

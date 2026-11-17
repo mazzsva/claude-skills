@@ -22,6 +22,8 @@ requirement gets a pass or a fail, with evidence.
   diff of the fix, checks what failed and what the fix touches, and copies each other
   verdict. Anthropic's engineers found that this
   "[is cheaper and finds more](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/)".
+* **The verdicts stay the verdicts of the reviewer.** The session that wrote the code reports
+  them as they are, and says so when it does not agree.
 * **The reviewer looks for stubs.** A fixed return value, an empty handler, or a branch that
   the spec needs and the code does not have.
 * **A pass needs proof.** Each `PASS` names an output line, or a file and a line. An edge case

@@ -140,6 +140,8 @@ Keep each real problem at its severity. Do not decide that it is acceptable.
 * **DO** list each file that the change touches, the small changes also, and each line under
   Deviations in the spec; I review the diff from this list, and a summary leaves the small
   changes out
+* **DO** give each verdict of the reviewer as it is; when you do not agree with one, say so
+  below the table, with your reason
 * **DO** end with what I must check myself, and with each finding of the reviewer that you
   did not fix and the reason
 * **DO NOT** commit; the `open-pr` skill does that when I ask

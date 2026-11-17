@@ -71,7 +71,8 @@ NOT CHECKED with the evidence: the file and line, a command and its output, or w
 evidence file shows for the running app.
 For each edge case, name the test that covers it, and give its result. An edge case with no
 test is a FAIL.
-Give a verdict for each line under Constraints and Out of scope also.
+Give a verdict for each line under Constraints and Out of scope also. A line under
+Deviations that ends with `Accepted` is a decision of the owner, and not a gap.
 Look for a stub: a fixed return value, an empty handler, or a branch that the spec needs and
 the code does not have.
 Report only a gap that affects correctness. Skip style.
@@ -94,8 +95,9 @@ Keep each real problem at its severity. Do not decide that it is acceptable.
 
 * **DO** ask me, before you start the review, about each line under Deviations that goes
   against a requirement, and show me what the evidence says about it; when I accept it, change
-  the requirement in the spec to match, and when I reject it, change the code. A review costs
-  much more than a question, and my answer decides what it checks
+  the requirement in the spec to match and write `Accepted` at the end of that line under
+  Deviations, and when I reject it, change the code. A review costs much more than a
+  question, and my answer decides what it checks
 * **DO** give a reviewer its brief only; a reviewer that reads the main conversation or your
   reasoning repeats your assumptions
 * **DO** run the two commands before each review; they print the tree that the reviewer sees

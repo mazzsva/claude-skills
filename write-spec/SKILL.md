@@ -123,8 +123,9 @@ Each one needs a test.
 
 ## How to hand off
 
-Show me the decisions, with the assumed ones marked. Correct the spec until I accept it, set
-its status to `accepted`, and give me this prompt for a fresh session:
+Show me the decisions in a message, with the assumed ones marked, and end the turn; I answer
+in text. Correct the spec until I accept it, then set its status to `accepted`, keep each
+`(assumed)` mark, and give me this prompt for a fresh session:
 
 ```text
 Build specs/<topic>.md. When the code forces you to leave the spec, pick the conservative

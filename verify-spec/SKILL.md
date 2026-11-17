@@ -71,6 +71,7 @@ NOT CHECKED with the evidence: the file and line, a command and its output, or w
 evidence file shows for the running app.
 For each edge case, name the test that covers it, and give its result. An edge case with no
 test is a FAIL.
+Give a verdict for each line under Constraints and Out of scope also.
 Look for a stub: a fixed return value, an empty handler, or a branch that the spec needs and
 the code does not have.
 Report only a gap that affects correctness. Skip style.

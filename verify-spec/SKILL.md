@@ -53,7 +53,13 @@ app     for each action under Check: what you did, and what you saw
 
 ## How to get an independent review
 
-Start a subagent that did not write the code, and give it this brief with the paths filled in:
+Save the tree that the reviewer sees, start a subagent that did not write the code, and give
+it this brief with the paths filled in:
+
+```bash
+I=$(mktemp) && cp "$(git rev-parse --git-path index)" "$I"
+GIT_INDEX_FILE=$I git add -A && GIT_INDEX_FILE=$I git write-tree
+```
 
 ```text
 You review a change that you did not write. Report only: do not edit a file in the
@@ -70,12 +76,30 @@ Report only a gap that affects correctness. Skip style.
 Keep each real problem at its severity. Do not decide that it is acceptable.
 ```
 
+For a review after a fix, give this brief in its place:
+
+```text
+You review a fix to a change that you did not write. Report only: do not edit a file in the
+repository, and put each file that you make outside it.
+Repository: <path>. Spec: <path>. Evidence: <path>.
+The report of the review before this one: <path>. The fix: `git diff <tree before> <tree now>`.
+Give PASS, FAIL, or NOT CHECKED with the evidence for each earlier FAIL and NOT CHECKED, and
+for each requirement, edge case, and constraint that the fix touches. Copy each other
+verdict from the earlier report, and do not check it again.
+Report only a gap that affects correctness. Skip style.
+Keep each real problem at its severity. Do not decide that it is acceptable.
+```
+
 * **DO** ask me, before you start the review, about each line under Deviations that goes
   against a requirement, and show me what the evidence says about it; when I accept it, change
   the requirement in the spec to match, and when I reject it, change the code. A review costs
   much more than a question, and my answer decides what it checks
-* **DO** give the reviewer the spec, the evidence, and the diff only; a reviewer that reads the
-  main conversation or your reasoning repeats your assumptions
+* **DO** give a reviewer its brief only; a reviewer that reads the main conversation or your
+  reasoning repeats your assumptions
+* **DO** run the two commands before each review; they print the tree that the reviewer sees
+  and change nothing, and the two trees give the fix to the next reviewer
+* **DO** save the report of each review in a file as the reviewer wrote it; a review that
+  builds on the last one costs less and finds more
 * **DO** start the reviewer on a model that is not the model of this session, when one is
   available; a model rates its own work too high, and a second model has other blind spots
 * **DO** check that each `PASS` from the reviewer names its evidence; agreement between two

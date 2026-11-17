@@ -18,6 +18,10 @@ requirement gets a pass or a fail, with evidence.
 * **The reviewer starts with a fresh context.** A new subagent, in its own context window,
   gets the spec, the evidence, and the diff only. It never reads the main conversation or the
   reasoning of the builder, so it cannot repeat the assumptions of the builder.
+* **A review after a fix builds on the review before it.** It gets that report and the exact
+  diff of the fix, checks what failed and what the fix touches, and copies each other
+  verdict. Anthropic's engineers found that this
+  "[is cheaper and finds more](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/)".
 * **The reviewer looks for stubs.** A fixed return value, an empty handler, or a branch that
   the spec needs and the code does not have.
 * **A pass needs proof.** Each `PASS` names an output line, or a file and a line. An edge case

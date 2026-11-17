@@ -20,7 +20,8 @@ that only you can make, and writes a spec that a fresh session can build from an
 * **It asks only what changes the result.** One question at a time, the largest decision
   first, with choices, a recommendation, and the best reason for each choice. Each other
   decision gets a default, and the spec marks it as assumed. When words are not enough, it
-  offers a throwaway prototype.
+  offers a prototype, and the spec names the one that you pick as a reference for the build
+  and the review.
 * **It specifies the result, not the path.** Each requirement is a behaviour that a person or
   a test can observe. A spec that fixes the implementation stops a better one that the model
   finds during the build.
@@ -34,8 +35,8 @@ that only you can make, and writes a spec that a fresh session can build from an
 ## Safety
 
 A spec stays local. The skill adds `specs/` to the ignore list of that clone, in a file that
-git does not track, so no skill commits or pushes it. A prototype goes outside the
-repository, or the skill deletes it after you look. The build starts only when you ask.
+git does not track, so no skill commits or pushes it. A prototype stays in `specs/` with the
+spec, for the same reason. The build starts only when you ask.
 
 ## Requirements
 

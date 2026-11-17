@@ -62,10 +62,11 @@ Ask in this order, because an early answer changes the later questions:
 * **DO** ask about a decision only when a different answer changes the result for me, and
   skip a topic of the list that the code settles; give each other decision a default, and
   write that default in the spec as assumed
-* **DO** offer a throwaway prototype with fake data, or three or four different directions,
-  when I cannot describe the result but I would know it when I see it; put it outside the
-  repository, or delete it after I look, because the `open-pr` skill commits each file that
-  it finds
+* **DO** offer a prototype with fake data, or three or four different directions, when I
+  cannot describe the result but I would know it when I see it; put it in `specs/<topic>/`,
+  which git ignores, because the `open-pr` skill commits each other file that it finds
+* **DO** name the direction that I pick under Constraints as a reference; the build and the
+  `verify-spec` reviewer read it, and it shows more than my words do
 * **DO NOT** ask me how to build it; I decide what the result is, and you decide the path
 
 ## How to write the spec

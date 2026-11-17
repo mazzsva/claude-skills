@@ -18,8 +18,9 @@ that only you can make, and writes a spec that a fresh session can build from an
   with no data: the code forces them, and the request did not mention them. It shows you
   this list first, and waits until you have read it.
 * **It asks only what changes the result.** One question at a time, the largest decision
-  first, with choices and a recommendation. Each other decision gets a default, and the spec
-  marks it as assumed. When words are not enough, it offers a throwaway prototype.
+  first, with choices, a recommendation, and the best reason for each choice. Each other
+  decision gets a default, and the spec marks it as assumed. When words are not enough, it
+  offers a throwaway prototype.
 * **It specifies the result, not the path.** Each requirement is a behaviour that a person or
   a test can observe. A spec that fixes the implementation stops a better one that the model
   finds during the build.

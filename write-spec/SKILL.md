@@ -56,7 +56,9 @@ Ask in this order, because an early answer changes the later questions:
 4. How to verify that the work is done
 ```
 
-* **DO** ask one question at a time, with two to four choices and your recommendation first
+* **DO** ask one question at a time with the `AskUserQuestion` tool, or in text when the
+  session does not have it, with two to four choices and your recommendation first; give
+  each choice the strongest reason to pick it, and not a reason against it
 * **DO** ask about a decision only when a different answer changes the result for me, and
   skip a topic of the list that the code settles; give each other decision a default, and
   write that default in the spec as assumed

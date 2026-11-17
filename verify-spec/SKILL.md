@@ -69,7 +69,8 @@ Change: `git diff <base>`, and the untracked files in `git status --short`.
 For each numbered requirement, find the code that implements it, and give PASS, FAIL, or
 NOT CHECKED with the evidence: the file and line, a command and its output, or what the
 evidence file shows for the running app.
-For each edge case, name the test that covers it, and give its result.
+For each edge case, name the test that covers it, and give its result. An edge case with no
+test is a FAIL.
 Look for a stub: a fixed return value, an empty handler, or a branch that the spec needs and
 the code does not have.
 Report only a gap that affects correctness. Skip style.

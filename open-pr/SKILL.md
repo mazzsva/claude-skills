@@ -104,7 +104,20 @@ did, ask me whether to branch from HEAD or from the new `origin/<default branch>
 ## 4. Commit
 
 * **DO** run the build, tests, and lint that CLAUDE.md asks for, and tell me what you ran. When
-  one fails, stop and tell me the first error.
+  one fails, fix the cause and run it again.
+* **DO** then run the `code-review` skill at `low` on the changes that the pull requests will
+  hold, when they change code; run the `security-review` skill also when they touch sign-in,
+  stored data, or the network. Before a review, run `git add -N -- <file>` for each untracked
+  file, because a review reads the diff, and the diff does not show a file that git does not
+  track. The prompt of `security-review` holds committed changes only, so give its sub-tasks
+  the output of `git diff HEAD` also.
+* **DO** answer each finding that affects correctness or security: fix it when the code shows
+  that it is real, and give the reason when it is not. After a fix, run the checks and the
+  review again, and answer only the findings that are new.
+* **DO** stop before the first commit and ask me, when a check or a finding is still open
+  after three rounds, or when the fix of a finding needs a decision that is mine.
+* **DO** report each finding with its file and line, and what you did about it, and each
+  decision that you left to me.
 * **DO** scan the added lines and the untracked files for a secret before the first commit.
 * **One topic on a new branch:** `git switch -c <name> --no-track origin/<default branch>`,
   stage the files by name, and commit. Your pending changes come along.
@@ -179,8 +192,8 @@ to the working tree you started in, also a linked worktree.
   --detach`), compare the result with `cmp`, and remove the scratch worktree. When a file
   differs, or no branch holds it, stop and tell me which file.
 * **DO** then restore the working tree to HEAD: `git restore --source=HEAD --staged --worktree
-  -- <file>` for each file that HEAD holds, `git rm -f -- <file>` for each new file that I
-  staged, and `rm -- <file>` for each untracked file that a commit holds. Ask nothing. The
+  -- <file>` for each file that HEAD holds, `git rm -f -- <file>` for each new file that the
+  index holds, and `rm -- <file>` for each untracked file that a commit holds. Ask nothing. The
   branches hold the work. A case-only rename restores by removing the new-case file and
   restoring the old one.
 * **DO** remove the worktrees you made, and the local branches you made that are pushed and not

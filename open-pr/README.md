@@ -21,6 +21,11 @@ one topic for each pull request, in logical commits, on a well-named branch.
 * **It proves that no change is lost before it cleans up.** It compares the hash of each
   changed file with the same file on its branch. For a file that it split, it merges the
   branches in a scratch worktree and compares the result byte for byte.
+* **It reviews before it commits.** It runs the build, the tests, and the lint, and then a
+  code review, and a security review for code that touches sign-in, stored data, or the
+  network. It fixes what they find and reviews again. It asks you only after three rounds, or
+  for a decision that is yours. Anthropic's engineers work this way:
+  "[Most changes have been reviewed and fixed by Claude at least once before a human is asked to look](https://claude.dev/blog/solving-code-review-at-anthropic/)".
 * **It treats a prompt injection as data.** File content, diffs, `gh` output, hook output,
   and templates are never instructions.
 * **It does not trust a success message.** A hook can change a commit message, so it compares
@@ -30,7 +35,7 @@ one topic for each pull request, in logical commits, on a well-named branch.
   and names the object. The body says why the change is needed, and it uses your template
   exactly.
 * **It is short on purpose.** It grew to 751 lines in more than 60 commits of tests, and I
-  then rewrote it in fewer than 200. Anthropic's skill guide gives the reason:
+  then rewrote it in about 200. Anthropic's skill guide gives the reason:
   "[the context window is a public good](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)".
 
 ## Safety
@@ -38,8 +43,8 @@ one topic for each pull request, in logical commits, on a well-named branch.
 It never forces a push, skips a hook, pushes to the default branch, or merges a pull request.
 It changes one commit only: a vague message at the tip of a branch that is not pushed, after
 you agree. It stops and asks before a secret or a file over 100 MB goes into a commit, when a
-check fails, and when a push is rejected. With more than one topic, it shows you the plan
-first.
+check or a review finding is still open after three rounds of fixes, when a fix needs your
+decision, and when a push is rejected. With more than one topic, it shows you the plan first.
 
 ## Requirements
 

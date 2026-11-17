@@ -15,7 +15,8 @@ that only you can make, and writes a spec that a fresh session can build from an
   turn. It also finds a file that already does a similar thing, because source code shows a
   pattern better than words do.
 * **It finds your unknown unknowns.** A migration of saved data, a second platform, a screen
-  with no data: the code forces them, and the request did not mention them.
+  with no data: the code forces them, and the request did not mention them. It shows you
+  this list first, and waits until you have read it.
 * **It asks only what changes the result.** One question at a time, the largest decision
   first, with choices and a recommendation. Each other decision gets a default, and the spec
   marks it as assumed. When words are not enough, it offers a throwaway prototype.

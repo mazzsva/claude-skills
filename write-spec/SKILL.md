@@ -26,23 +26,24 @@ git check-ignore -q specs/x || echo 'specs/' >> "$(git rev-parse --git-path info
   repository answers costs me a turn
 * **DO** find a file that already does a similar thing; it becomes the reference in the spec,
   because source code shows a pattern better than my words do
-* **DO** ask me, in one question, what I know about this part of the code and what I decided
-  already, when my request does not say; the next section depends on the answer
 
 ## How to find the unknowns
 
-Before the interview, show me the unknowns: the decisions that this work forces and that my
-request does not make, with the ones that I probably do not know about:
+Before the interview, show me the unknowns in a message: the decisions that this work forces
+and that my request does not make, with the ones that I probably do not know about. End the
+turn with one question in text: what I decided already, and what in the list is new to me.
 
 ```text
 Decision | Why it matters | Recommendation
 ```
 
-* **DO** write the list for what I know, and explain each term that I did not use
+* **DO** explain each term that I did not use in my request
 * **DO** include what the code makes necessary and I did not mention, such as a migration of
   saved data, a second platform, or a screen with no data
 * **DO NOT** list a choice of implementation that you can change later at no cost to me; that
   choice is yours
+* **DO NOT** open the question tool in the turn of the list; its dialog hides the list, and I
+  must read the list before I answer a question
 
 ## How to interview me
 

@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    name: Build and Test
+    if: github.event.pull_request.draft != true
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Lint the scripts
+        run: shellcheck link.sh
+
+      - name: Check the skills
+        run: |
+          status=0
+          for skill in */SKILL.md; do
+            folder=${skill%/SKILL.md}
+            front=$(awk 'NR == 1 && $0 == "---" { inside = 1; next } inside && $0 == "---" { exit } inside' "$skill")
+            name=$(printf '%s\n' "$front" | sed -n 's/^name: *//p')
+            if [ "$name" != "$folder" ]; then
+              echo "::error file=$skill::The name is \"$name\", but the folder is \"$folder\""
+              status=1
+            fi
+            if ! printf '%s\n' "$front" | grep -q '^description: *[^ ]'; then
+              echo "::error file=$skill::The skill has no description"
+              status=1
+            fi
+            if [ ! -f "$folder/README.md" ]; then
+              echo "::error file=$skill::The skill has no README.md"
+              status=1
+            fi
+            if ! grep -q "href=\"$folder\"" README.md; then
+              echo "::error file=README.md::The README does not list $folder"
+              status=1
+            fi
+          done
+          exit "$status"

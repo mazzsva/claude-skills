@@ -112,12 +112,13 @@ did, ask me whether to branch from HEAD or from the new `origin/<default branch>
   track. The prompt of `security-review` holds committed changes only, so give its sub-tasks
   the output of `git diff HEAD` also.
 * **DO** answer each finding that affects correctness or security: fix it when the code shows
-  that it is real, and give the reason when it is not. After a fix, run the checks and the
-  review again, and answer only the findings that are new.
+  that it is real, in each place of the changes that has the same mistake, and give the
+  reason when it is not. After a fix, run the checks and the review again, and answer only the
+  findings that are new.
 * **DO** stop before the first commit and ask me, when a check or a finding is still open
   after three rounds, or when the fix of a finding needs a decision that is mine.
-* **DO** report each finding with its file and line, and what you did about it, and each
-  decision that you left to me.
+* **DO** report each finding with its file and line, and what you did about it, each place
+  outside the changes that has the same mistake, and each decision that you left to me.
 * **DO** scan the added lines and the untracked files for a secret before the first commit.
 * **One topic on a new branch:** `git switch -c <name> --no-track origin/<default branch>`,
   stage the files by name, and commit. Your pending changes come along.

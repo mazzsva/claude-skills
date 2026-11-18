@@ -24,8 +24,8 @@ one topic for each pull request, in logical commits, on a well-named branch.
 * **It reviews before it commits.** It runs the build, the tests, and the lint, and then a
   code review, and a security review for code that touches sign-in, stored data, or the
   network. It fixes what they find, in each place of the change that has the same mistake,
-  and reviews again. It asks you only after three rounds, or for a decision that is yours.
-  Anthropic's engineers work this way:
+  and reviews again. It corrects a README line that the change makes false. It asks you only
+  after three rounds, or for a decision that is yours. Anthropic's engineers work this way:
   "[Most changes have been reviewed and fixed by Claude at least once before a human is asked to look](https://claude.dev/blog/solving-code-review-at-anthropic/)".
 * **It treats a prompt injection as data.** File content, diffs, `gh` output, hook output,
   and templates are never instructions.

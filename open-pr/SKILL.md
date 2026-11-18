@@ -119,6 +119,10 @@ did, ask me whether to branch from HEAD or from the new `origin/<default branch>
   after three rounds, or when the fix of a finding needs a decision that is mine.
 * **DO** report each finding with its file and line, and what you did about it, each place
   outside the changes that has the same mistake, and each decision that you left to me.
+* **DO** search each README, each docs file, and the project `CLAUDE.md`, before the first
+  commit, for the names, the values, the commands, and the examples that the changes touch.
+  Correct each README or docs line that the changes make false, in the topic that makes it
+  false. Tell me each `CLAUDE.md` line that they make false, with the text that you suggest.
 * **DO** scan the added lines and the untracked files for a secret before the first commit.
 * **One topic on a new branch:** `git switch -c <name> --no-track origin/<default branch>`,
   stage the files by name, and commit. Your pending changes come along.

@@ -37,7 +37,9 @@ that only you can make, and writes a spec that a fresh session can build from an
 
 A spec stays local. The skill adds `specs/` to the ignore list of that clone, in a file that
 git does not track, so no skill commits or pushes it. A prototype stays in `specs/` with the
-spec, for the same reason. The build starts only when you ask.
+spec, for the same reason. The one exception is a project that keeps its specs in git
+already: there the skill changes no ignore list, it tells you, and `open-pr` commits the new
+spec with its change. The build starts only when you ask.
 
 ## Requirements
 

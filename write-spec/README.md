@@ -26,7 +26,8 @@ that only you can make, and writes a spec that a fresh session can build from an
   a test can observe. A spec that fixes the implementation stops a better one that the model
   finds during the build.
 * **It defines done.** Requirements are numbered, edge cases need tests, and each check is an
-  exact command with expected output.
+  exact command with expected output. For a parser, an encoder, a migration, or a rewrite,
+  one requirement is a property that a test checks with generated inputs.
 * **It hands off the build to a fresh session.** As the
   [Claude Code best practices](https://code.claude.com/docs/en/best-practices) say, "the
   build begins with a clean context and a written definition of done". When the code forces

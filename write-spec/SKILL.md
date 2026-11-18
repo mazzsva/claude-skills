@@ -109,6 +109,11 @@ Each one needs a test.
 * **DO** write each requirement as a behaviour that a person or a test can observe, not as a
   step of the implementation; a spec that fixes the path stops a better path that you find
   during the build
+* **DO** write one requirement as a property, when the work is a parser, an encoder, a
+  migration, or a rewrite: a statement that holds for each input, such as "a read of what a
+  save wrote gives the same value" or "the new code gives the same result as the old code",
+  and that a test checks with generated inputs; such a test finds the inputs that a list of
+  examples does not have
 * **DO** number each requirement; the `verify-spec` skill reports by number
 * **DO** make each line under Check exact: a command with the output that means pass, or an
   action in the running app with what to see; leave the action out when the project has no app

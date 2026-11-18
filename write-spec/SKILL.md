@@ -17,11 +17,15 @@ Do the sections in order. First read my request against the code:
 ```bash
 git rev-parse --show-toplevel && git status --short --branch
 ls specs 2>/dev/null
-git check-ignore -q specs/x || echo 'specs/' >> "$(git rev-parse --git-path info/exclude)"
+git ls-files specs | grep -q . || git check-ignore -q specs/x ||
+  echo 'specs/' >> "$(git rev-parse --git-path info/exclude)"
 ```
 
 * **DO** run the third command; it adds `specs/` to the ignore list of this clone only, in a
   file that git does not track, so that the `open-pr` skill never commits or pushes a spec
+* **DO** tell me, when `git ls-files specs` prints a file, that this project keeps its specs
+  in git; the third command then adds nothing, and the `open-pr` skill commits the new spec
+  with its change
 * **DO** read the code that the request touches before the first question; a question that the
   repository answers costs me a turn
 * **DO** find a file that already does a similar thing; it becomes the reference in the spec,
@@ -64,7 +68,8 @@ Ask in this order, because an early answer changes the later questions:
   write that default in the spec as assumed
 * **DO** offer a prototype with fake data, or three or four different directions, when I
   cannot describe the result but I would know it when I see it; put it in `specs/<topic>/`,
-  which git ignores, because the `open-pr` skill commits each other file that it finds
+  and add that folder to the same ignore list when git does not ignore it, because the
+  `open-pr` skill commits each other file that it finds
 * **DO** name the direction that I pick under Constraints as a reference; the build and the
   `verify-spec` reviewer read it, and it shows more than my words do
 * **DO NOT** ask me how to build it; I decide what the result is, and you decide the path

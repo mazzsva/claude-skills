@@ -94,5 +94,3 @@ rm -rf "${TMPDIR:-/tmp/}organize-downloads-folder"
   the same, and the user decides which one stays
 * **DO** give the user the tree of folders, with the number of items in each and one line
   that says what each folder holds
-
-Copyright © 2026 Lorenzo Mazzarotto

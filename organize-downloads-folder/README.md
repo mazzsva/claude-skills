@@ -36,5 +36,3 @@ installs an app, disk image, package, or script.
 ## Requirements
 
 macOS.
-
-Copyright © 2026 Lorenzo Mazzarotto

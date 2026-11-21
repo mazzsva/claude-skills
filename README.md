@@ -28,5 +28,3 @@ cd claude-skills
 ```
 
 Run `link.sh` again after you add a skill. It never deletes anything.
-
-Copyright © 2026 Lorenzo Mazzarotto

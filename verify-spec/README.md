@@ -45,5 +45,3 @@ report says the review was not independent.
 
 Git. A spec from the [write-spec](../write-spec) skill gives the best result, but any written
 list of requirements works.
-
-Copyright © 2026 Lorenzo Mazzarotto

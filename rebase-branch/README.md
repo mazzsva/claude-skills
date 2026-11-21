@@ -38,5 +38,3 @@ branch on `origin` holds a commit that your branch never held.
 ## Requirements
 
 Git, and a remote named `origin`.
-
-Copyright © 2026 Lorenzo Mazzarotto

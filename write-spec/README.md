@@ -44,5 +44,3 @@ spec with its change. The build starts only when you ask.
 ## Requirements
 
 Git.
-
-Copyright © 2026 Lorenzo Mazzarotto

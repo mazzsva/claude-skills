@@ -147,5 +147,3 @@ the verify-spec skill.
   open question is not a definition of done
 * **DO NOT** start the build in this session, unless I ask for it; a fresh session starts with
   a clean context and the written definition of done, without the turns of the interview
-
-Copyright © 2026 Lorenzo Mazzarotto

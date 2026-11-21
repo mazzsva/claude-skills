@@ -50,5 +50,3 @@ decision, and when a push is rejected. With more than one topic, it shows you th
 ## Requirements
 
 Git 2.38 or later, and the GitHub CLI, signed in.
-
-Copyright © 2026 Lorenzo Mazzarotto

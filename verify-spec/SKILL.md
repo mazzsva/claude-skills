@@ -153,5 +153,3 @@ Keep each real problem at its severity. Do not decide that it is acceptable.
 | `PASS` | The output of a command, or what you saw in the running app, shows the behaviour |
 | `FAIL` | The behaviour is absent, wrong, or a stub, or an edge case has no test |
 | `NOT CHECKED` | You had no way to observe it here; say what I must do to check it |
-
-Copyright © 2026 Lorenzo Mazzarotto
